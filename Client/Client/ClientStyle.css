@@ -1,0 +1,124 @@
+body
+{
+	font-family: Arial;
+	color: #BBBBBB;
+	padding: 0px;
+	margin: 0px;
+}
+
+p, li, ol, ul
+{
+	padding: 2px;
+	margin: 2px;
+	font-size: 12px;
+	line-height: 1.2;
+}
+
+li 
+{
+	margin-left: 25px;
+}
+
+h1
+{
+	padding: 5px;
+	margin: 5px;
+}
+
+.formula
+{
+	color: #FFFFFF;
+}
+
+
+
+
+.primary
+{
+	/*border-left: 2px solid #3277AA;*/
+	border-left: 4px solid #44BBFF;
+	margin-left: 40px !important;
+	padding: 20px;
+	color: #44BBFF;
+}
+.primary p
+{
+	font-size: 18px !important;
+	line-height: 1.5 !important;
+}
+
+.secondary
+{
+	border-left: 4px solid #22FFAA;
+	margin-left: 50px !important;
+	padding: 15px;
+	color: #22FFAA;
+}
+.secondary p
+{
+	font-size: 16px; !important;
+}
+
+.tertiary
+{
+	border-left: 4px solid #FFAA77;
+	margin-left: 60px !important;
+	padding: 12px;
+	color: #FFAA77;
+}
+.tertiary p
+{
+	font-size: 14px !important;
+}
+
+
+.quaternary
+{
+	border-left: 4px solid #FF4433;
+	margin-left: 70 !important;
+	padding: 12px;
+	color: #FF4433;
+}
+.quaternary p
+{
+	font-size: 12px !important;
+}
+
+
+
+.separator
+{
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 95%;
+	margin-top: 10px;
+	margin-bottom: 0px;
+	/*border: 1px solid #004477;*/
+	border: 1px solid #888888;
+}
+
+.snippet
+{
+	margin-top: 10px;
+	margin-left: 80px;
+	margin-right: 0px;
+	background-color: #333333;
+	padding: 10px;
+	padding-left: 25px !important;
+}
+
+.templatepart
+{
+	color: #666666;
+	margin-left: 40px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	/*padding: 20px;*/
+}
+
+.title
+{
+	color: #EEEEEE;
+	margin-left: 20px;
+}

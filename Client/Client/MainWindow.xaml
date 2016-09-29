@@ -15,13 +15,8 @@
 		</Style>
 	</Window.Resources>
     <Grid>
-		<ScrollViewer>
-			<StackPanel Name="stkDocContainer" Margin="0, 20">
-				<!--<Grid Style="{StaticResource BlockStyle}">
-					<Label Content="Hello world!"/>
-				</Grid>-->
-				<!--<local:Block></local:Block>-->
-			</StackPanel>
+		<ScrollViewer Name="svMain">
+			<StackPanel Name="stkDocContainer"></StackPanel>
 		</ScrollViewer>
     </Grid>
 </Window>

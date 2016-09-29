@@ -1,4 +1,5 @@
 ﻿using CefSharp;
+using System.IO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,51 +32,15 @@ namespace Client
 			pSettings.SetOffScreenRenderingBestPerformanceArgs();
 			Cef.Initialize(pSettings);
 
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h3>Hello World!</h3>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("<h1>OH YEAH! THIS IS A TITLE!!!</h1>"));
-			
-			//stkDocContainer.Children.Add(Block.ConstructBlock("This is really just a test to see what happens when I do things...I really don't want to have an issue with text not being very good, or not having proper testing content, so this is my attempt to rectifity that terribly severe issue."));
-			/*stkDocContainer.Children.Add(Block.ConstructBlock("## Hello World!"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("### Hello World!"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("#### Hello World!"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("##### Hello World!"));
-			stkDocContainer.Children.Add(Block.ConstructBlock("###### Hello World!"));*/
+
+			// read in sample HTML
+			string sSample = File.ReadAllText(@"C:\dwl\lab\KnowledgeBase\Client\sample.html");
+
+			//stkDocContainer.Children.Add(Block.ConstructBlock(@"<h1>Hello World!</h1><p>\(\alpha = \beta\)"));
+			Page pPage = new Page();
+			pPage.Height = 800;
+			pPage.FillHtml(sSample);
+			stkDocContainer.Children.Add(pPage);
 		}
 	}
 }
