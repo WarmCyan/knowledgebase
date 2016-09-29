@@ -1,3 +1,6 @@
 Client/packages/*
 Client/Client/bin/*
 Client/Client/obj/*
+Server/packages/*
+Server/Server/bin/*
+Server/Server/obj/*
