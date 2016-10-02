@@ -11,13 +11,13 @@ namespace KnowledgeBaseServer
 {
 	class SnippetTableEntity : TableEntity 
 	{
-		public SnippetTableEntity() 
+		public SnippetTableEntity(string sSnippetName) 
 		{
 			this.PartitionKey = "SNIPPET";
-			this.RowKey = DateTime.UtcNow.Ticks.ToString();
+			this.RowKey = sSnippetName; 
 		}
+		public SnippetTableEntity() { }
 
-		public string TagRowID { get; set; }
-		public string Name { get; set; }
+		public string TagList { get; set; }
 	}
 }

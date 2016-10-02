@@ -31,56 +31,39 @@ namespace KnowledgeBaseServer
 
 		// methods
 
-
 		// gets a list of the snippet "file" names for the given list of query tags
-		public List<string> QuerySnippetList(List<string> lQueryTags)
+		public List<Snippet> QuerySnippetList(List<string> lQueryTags)
 		{
-			List<string> lTagIDs = this.GetTagIDs(lQueryTags);
+			List<TagSnippetTableEntity> lEntityUnionSet = new List<TagSnippetTableEntity>();
+
+			// get a list of snippets for each query tag
+			bool bFirst = true;
+			foreach (string sTag in lQueryTags)
+			{
+				// construct the query
+				TableQuery<TagSnippetTableEntity> pQuery = new TableQuery<TagSnippetTableEntity>().Where("PartitionKey eq '" + sTag + "'");
+
+				List<TagSnippetTableEntity> pQueryResultSet = this.Table.ExecuteQuery(pQuery).ToList();
+
+				// union each set with preexisting, (union of all of them)
+				if (bFirst) { lEntityUnionSet = pQueryResultSet; bFirst = false; }
+				else { lEntityUnionSet = lEntityUnionSet.Union(pQueryResultSet).ToList(); }
+			}
+
+			// create the list of snippets
+			List<Snippet> lSnippets = new List<Snippet>();
+			foreach (TagSnippetTableEntity pEntity in lEntityUnionSet) { lSnippets.Add(new Snippet(pEntity.RowKey, pEntity.TagList.Split(',').ToList())); }
+
+			return lSnippets;
 		}
 
-
-
-
-
-
-
-		// turn the list of tag NAMES into a list of tag IDS
-		public List<string> GetTagIDs(List<string> lQueryTags)
-		{
-			// construct the query
-			// TODO: dynamically adding to query filters (just loop through?)
-			//TableQuery<TagTableEntity> pQuery = new TableQuery<TagTableEntity>().Where(
-				//TableQuery.CombineFilters(
-					//TableQuery));
-
-		
-			return null;
-		}
-
-		
 
 		private void Initialize()
 		{
 			m_pStorageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
 			m_pTableClient = m_pStorageAccount.CreateCloudTableClient();
 		}
-
 		
-		/*private Dictionary<string, List<string>> m_dTagLists;
-
-		private void FillTagLists()
-		{
-			// read in file		
-			string[] aLines = File.ReadAllLines("_tags.txt");
-			foreach (string sLine in aLines)
-			{
-				int iEqualsIndex = sLine.IndexOf("=");
-				string sKey = sLine.Substring(0, iEqualsIndex);
-				string sList = sLine.Substring(iEqualsIndex + 1);
-				//List<string> lSnippets = sList.Split(",");
-			}
-		}*/
-
 		private CloudTable GetTagsTable()
 		{
 			CloudTable pTable = m_pTableClient.GetTableReference("KnowledgeBaseTags");
