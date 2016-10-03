@@ -10,6 +10,11 @@ namespace KnowledgeBaseServer
 	class TagSnippetTableEntity : TableEntity
 	{
 		// construction
+		public TagSnippetTableEntity(string sTagName, string sSnippetName)
+		{
+			this.PartitionKey = sTagName;
+			this.RowKey = sSnippetName;
+		}
 		public TagSnippetTableEntity(string sTagName)
 		{
 			this.PartitionKey = sTagName;

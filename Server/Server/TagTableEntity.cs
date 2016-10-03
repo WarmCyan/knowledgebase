@@ -24,7 +24,6 @@ namespace KnowledgeBaseServer
 		//public string TagRowID { get; set; }
 		public string Name { get; set; }
 		public bool IsSource { get; set; }
-		public int Count { get; set; }
 		public string SourceFileName { get; set; }
 	}
 }

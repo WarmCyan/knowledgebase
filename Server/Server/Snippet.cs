@@ -8,6 +8,10 @@ namespace KnowledgeBaseServer
 {
 	public class Snippet
 	{
+
+		// the content should have the name of the blob file for "source" (and then just a piece of text for if there's a page number associated with it or whatever)
+
+	
 		// member variables
 		private string m_sFileName;
 		private List<string> m_lTags;
@@ -25,5 +29,8 @@ namespace KnowledgeBaseServer
 		public string FileName { get { return m_sFileName; } set { m_sFileName = value; } }
 		public List<string> Tags { get { return m_lTags; } set { m_lTags = value; } }
 		public string Content { get { return m_sContent; } set { m_sContent = value; } }
+
+		// functions
+		public void ParseContent(string sContent) { this.Content = sContent; }
 	}
 }
