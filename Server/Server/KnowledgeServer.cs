@@ -44,8 +44,10 @@ namespace KnowledgeBaseServer
 
 		// PUBLIC FACING ADD SNIPPET METHOD
 		// NOTE: adding a new source should be done as a SEPARATE API CALL (as well as separate client action if you think about it)
-		public void AddSnippet(string sSnippet, List<string> lTags)
+		//public void AddSnippet(string sSnippet, List<string> lTags)
+		public void AddSnippet(string sSnippet, string sTagList)
 		{
+			List<string> lTags = sTagList.Split(',').ToList();
 			Snippet pSnippet = new Snippet(sSnippet, lTags);
 
 			// create the blob
@@ -56,9 +58,9 @@ namespace KnowledgeBaseServer
 			TableBatchOperation pBatchOperation = new TableBatchOperation();
 			
 			// add the snippet name to each of the tag sets
-			string sTagList = "";
+			/*string sTagList = "";
 			foreach (string sTag in lTags) { sTagList += sTag + ","; }
-			sTagList = sTagList.Trim(',');
+			sTagList = sTagList.Trim(',');*/
 			foreach (string sTag in lTags)
 			{
 				TagSnippetTableEntity pTagSnippetEntity = new TagSnippetTableEntity(sTag, sFileName);
