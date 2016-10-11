@@ -40,6 +40,12 @@ namespace KnowledgeBaseServer
 			}
 		}
 
+		// construction
+		public KnowledgeServer()
+		{
+			this.Initialize();
+		}
+
 		// methods
 
 		// PUBLIC FACING ADD SNIPPET METHOD
@@ -55,7 +61,8 @@ namespace KnowledgeBaseServer
 			CloudBlockBlob pBlob = this.Container.GetBlockBlobReference(sFileName);
 			pBlob.UploadText(sSnippet);
 
-			TableBatchOperation pBatchOperation = new TableBatchOperation();
+			//TableBatchOperation pBatchOperation = new TableBatchOperation();
+			List<TableOperation> lOperations = new List<TableOperation>();
 			
 			// add the snippet name to each of the tag sets
 			/*string sTagList = "";
@@ -65,13 +72,15 @@ namespace KnowledgeBaseServer
 			{
 				TagSnippetTableEntity pTagSnippetEntity = new TagSnippetTableEntity(sTag, sFileName);
 				pTagSnippetEntity.TagList = sTagList;
-				pBatchOperation.Insert(pTagSnippetEntity);
+				lOperations.Add(TableOperation.Insert(pTagSnippetEntity));
+				//pBatchOperation.Insert(pTagSnippetEntity);
 			}
 
 			// add the raw snippet
 			SnippetTableEntity pSnippetEntity = new SnippetTableEntity(sFileName);
 			pSnippetEntity.TagList = sTagList;
-			pBatchOperation.Insert(pSnippetEntity);
+			lOperations.Add(TableOperation.Insert(pSnippetEntity));
+			//pBatchOperation.Insert(pSnippetEntity);
 
 			// try to add the tags (NOTE: This does NOT add source tags)
 			foreach (string sTag in lTags)
@@ -79,11 +88,13 @@ namespace KnowledgeBaseServer
 				TagTableEntity pTagEntity = new TagTableEntity(sTag);
 				pTagEntity.IsSource = false;
 				if (sTag.StartsWith("source:")) { continue; }
-				pBatchOperation.InsertOrReplace(pTagEntity);
+				lOperations.Add(TableOperation.InsertOrReplace(pTagEntity));
+				//pBatchOperation.InsertOrReplace(pTagEntity);
 			}
 
 			// run the batch operation
-			m_pTable.ExecuteBatch(pBatchOperation);
+			//m_pTable.ExecuteBatch(pBatchOperation);
+			foreach (TableOperation pOperation in lOperations) { this.Table.Execute(pOperation); }
 		}
 
 		// PUBIC FACING QUERY METHOD (should return html)
@@ -141,7 +152,7 @@ namespace KnowledgeBaseServer
 		
 		private CloudTable GetTagsTable()
 		{
-			CloudTable pTable = m_pTableClient.GetTableReference("KnowledgeBaseDB");
+			CloudTable pTable = m_pTableClient.GetTableReference("knowledgebasedb");
 
 			// make sure it exists
 			pTable.CreateIfNotExists();
@@ -150,7 +161,7 @@ namespace KnowledgeBaseServer
 		
 		private CloudBlobContainer GetSnippetsContainer()
 		{
-			CloudBlobContainer pContainer = m_pBlobClient.GetContainerReference("KnowledgeBaseSnippets");
+			CloudBlobContainer pContainer = m_pBlobClient.GetContainerReference("knowledgebasesnippets");
 
 			// make sure it exists
 			pContainer.CreateIfNotExists();

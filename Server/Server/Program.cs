@@ -21,15 +21,21 @@ namespace KnowledgeBaseServer
 			string sBody = @"<params>
 					<param name='sTagList'>Definition,AI,Theory,Genetic_Algorithm</param>
 					<param name='sSnippet'>
-						<Snippet>This is the definition of a genetic algorithm! Yes, genetic algorithm! How exciting! Are you not entertained??</Snippet>
-						<Source>http://www.wikipedia.com</Source>
+						<snippet>This is the definition of a genetic algorithm! Yes, genetic algorithm! How exciting! Are you not entertained??</snippet>
+						<source>http://www.wikipedia.com</source>
 					</param>
 				</params>";
 
-			string sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/AddSnippet", sBody, true);
-			//string sResponse = WebCommunications.SendGetRequest("http://dwlapi.azurewebsites.net/api/reflection/Priorities/PriorityManager/PriorityManager/ListPriorities", true);
+			////string sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/AddSnippet", sBody, true);
+			//string sResponse = WebCommunications.SendPostRequest("http://localhost:16651/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/AddSnippet", sBody, true);
+			////string sResponse = WebCommunications.SendGetRequest("http://dwlapi.azurewebsites.net/api/reflection/Priorities/PriorityManager/PriorityManager/ListPriorities", true);
 
-			Console.WriteLine(sResponse);
+			//Console.WriteLine(sResponse);
+
+			KnowledgeServer ks = new KnowledgeServer();
+			ks.AddSnippet("<snippet>This is the testing definition of a genetic algorithm! Yes, genetic algorithm! This is so exciting!!!</snippet><source>http://wikipedia.com</source>", "Definition,AI,Theory,Genetic_Algorithm");
+
+			Console.WriteLine("Finished");
 			Console.Read();
 		}
 	}
