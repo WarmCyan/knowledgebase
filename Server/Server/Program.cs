@@ -26,8 +26,8 @@ namespace KnowledgeBaseServer
 					</param>
 				</params>";
 
-			////string sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/AddSnippet", sBody, true);
-			string sResponse = WebCommunications.SendPostRequest("http://localhost:16651/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/AddSnippet", sBody, true);
+			string sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/AddSnippet", sBody, true);
+			//string sResponse = WebCommunications.SendPostRequest("http://localhost:16651/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/AddSnippet", sBody, true);
 			////string sResponse = WebCommunications.SendGetRequest("http://dwlapi.azurewebsites.net/api/reflection/Priorities/PriorityManager/PriorityManager/ListPriorities", true);
 			//string sResponse = WebCommunications.SendGetRequest("http://localhost:16651/api/reflection/Priorities/PriorityManager/PriorityManager/ListPriorities", true);
 
