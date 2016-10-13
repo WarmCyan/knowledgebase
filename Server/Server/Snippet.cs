@@ -12,7 +12,7 @@ namespace KnowledgeBaseServer
 
 		// the content should have the name of the blob file for "source" (and then just a piece of text for if there's a page number associated with it or whatever)
 
-		private static string s_sMetaPattern = @"<meta name='([a-zA-Z]*)' content='([a-zA-Z]*)'>";
+		private static string s_sMetaPattern = @"<meta name='([a-zA-Z]*)' content='([^\']*)'>";
 
 	
 		// member variables
@@ -20,6 +20,7 @@ namespace KnowledgeBaseServer
 		private List<string> m_lTags;
 		private string m_sContent;
 		private string m_sSourceTag;
+		private Dictionary<string, string> m_dMetaData;
 
 		// construction
 		public Snippet() { }
@@ -33,7 +34,8 @@ namespace KnowledgeBaseServer
 		public string FileName { get { return m_sFileName; } set { m_sFileName = value; } }
 		public List<string> Tags { get { return m_lTags; } set { m_lTags = value; } }
 		public string Content { get { return m_sContent; } set { m_sContent = value; } }
-		public string SourceTag { get { return m_sSourceTag; } set { m_sSourceTag = value; } }
+		//public string SourceTag { get { return m_sSourceTag; } set { m_sSourceTag = value; } }
+		public Dictionary<string, string> MetaData { get { return m_dMetaData; } set { m_dMetaData = value; } }
 
 		// functions
 		public void ParseContent(string sContent) 
@@ -44,11 +46,14 @@ namespace KnowledgeBaseServer
 
 		private void FindMetaSource()
 		{
+			m_dMetaData = new Dictionary<string, string>();
 			MatchCollection pMatches = Regex.Matches(this.Content, s_sMetaPattern);
 			foreach (Match pMatch in pMatches)
 			{
-				if (pMatch.Groups[1].Value == "sourceTag") { this.SourceTag = pMatch.Groups[2].Value; }
+				//if (pMatch.Groups[1].Value == "sourceTag") { this.SourceTag = pMatch.Groups[2].Value; }
+				m_dMetaData.Add(pMatch.Groups[1].Value, pMatch.Groups[2].Value);
 			}
+			//this.SourceTag = this.MetaData
 		}
 	}
 }

@@ -8,10 +8,14 @@ namespace KnowledgeBaseServer
 {
 	public class PageSnippet
 	{
+		// static variables
+		public static int s_sSnippetID = 0;
+	
 		// member variables
 		private int m_iLevel = 0; //0 = normal, 1 = quaternary, 2 = tertiary, 3 = secondary, 4 = primary
 		private PageSection m_eSection = PageSection.Normal;
 		private Snippet m_pSnippet = null;
+		private int m_iID = 0;
 		//private string m_sContent = "";
 
 		// construction
@@ -21,12 +25,15 @@ namespace KnowledgeBaseServer
 			this.Snippet = pSnippet;
 			this.Level = iLevel;
 			this.Section = eSection;
+			this.m_iID = s_sSnippetID;
+			s_sSnippetID++;
 		}
 		
 		// properties
 		public int Level { get { return m_iLevel; } set { m_iLevel = value; } }
 		public PageSection Section { get { return m_eSection; } set { m_eSection = value; } }
 		public Snippet Snippet { get { return m_pSnippet; } set { m_pSnippet = value; } }
+		public int ID { get { return m_iID; } set { m_iID = value; } }
 
 		// methods
 		public string Build(int iMaxTagCount)
@@ -45,7 +52,7 @@ namespace KnowledgeBaseServer
 			// adjust level if has an important tag
 			if (this.Snippet.Tags.Contains("Important") && this.Level < 4) { this.Level++; }
 		
-			string sHTML = "<div class='snippet";
+			string sHTML = "<div id='snippet" + this.ID.ToString() + "' class='snippet";
 			// determine level of importance
 			switch (this.Level)
 			{
@@ -62,9 +69,9 @@ namespace KnowledgeBaseServer
 					sHTML += " primary";
 					break;
 			}
-			sHTML += "'>";
+			sHTML += "' onmouseover='SnippetOnMouseOver(" + this.ID.ToString() + ")' onclick='SnippetOnClick(" + this.ID.ToString() + ")'>";
 			sHTML += this.Snippet.Content;
-			sHTML += "</div>";
+			sHTML += "<p class='sourcetext' id='snippetsource" + this.ID.ToString() + "' onclick='SnippetSourceOnClick(" + this.ID.ToString() + ")' onmouseover='SnippetSourceOnMouseOver(" + this.ID.ToString() + ")'>source</p></div>";
 
 			return sHTML;
 		}

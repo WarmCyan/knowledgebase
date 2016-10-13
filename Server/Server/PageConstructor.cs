@@ -28,7 +28,10 @@ namespace KnowledgeBaseServer
 		private Dictionary<string, List<PageSnippet>> m_dDepthSections = new Dictionary<string, List<PageSnippet>>();
 
 		// construction
-		public Page() { }
+		public Page() 
+		{
+			PageSnippet.s_sSnippetID = 0;
+		}
 
 		// return page HTML
 		public string Construct(string sOriginalQuery, List<Snippet> lSnippets)
@@ -222,7 +225,7 @@ namespace KnowledgeBaseServer
 				bool bSnippetAdded = false; // if snippet is never added in the conditions, then add it after the loop into the "normal" section
 				foreach (string sTag in pSnippet.Tags)
 				{
-					if (sTag == "Depth" || sTag == "Important" || sTag == pSnippet.SourceTag || m_lQueryTags.Contains(sTag)) { continue; } 
+					if (sTag == "Depth" || sTag == "Important" || sTag == pSnippet.MetaData["sourceTag"] || m_lQueryTags.Contains(sTag)) { continue; } 
 					if (dTagOrganizedSnippets.ContainsKey(sTag)) { bSnippetAdded = true; dTagOrganizedSnippets[sTag].Add(pSnippet); } // if collection for this tag exists, add snippet to it
 					else { bSnippetAdded = true; dTagOrganizedSnippets.Add(sTag, new List<Snippet>() { pSnippet }); } // if collection for tag doesn't exist, make it
 				}
