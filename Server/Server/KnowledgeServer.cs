@@ -110,7 +110,7 @@ namespace KnowledgeBaseServer
 		// gets a list of the snippet "file" names for the given list of query tags
 		private List<Snippet> QuerySnippetList(List<string> lQueryTags)
 		{
-			List<TagSnippetTableEntity> lEntityUnionSet = new List<TagSnippetTableEntity>();
+			List<TagSnippetTableEntity> lEntityIntersectSet = new List<TagSnippetTableEntity>();
 
 			// get a list of snippets for each query tag
 			bool bFirst = true;
@@ -122,15 +122,31 @@ namespace KnowledgeBaseServer
 				List<TagSnippetTableEntity> pQueryResultSet = this.Table.ExecuteQuery(pQuery).ToList();
 
 				// union each set with preexisting, (union of all of them)
-				if (bFirst) { lEntityUnionSet = pQueryResultSet; bFirst = false; }
-				else { lEntityUnionSet = lEntityUnionSet.Union(pQueryResultSet).ToList(); }
+				if (bFirst) { lEntityIntersectSet = pQueryResultSet; bFirst = false; }
+				else { lEntityIntersectSet = this.FindIntersection(lEntityIntersectSet, pQueryResultSet.ToList()); }
 			}
 
 			// create the list of snippets
 			List<Snippet> lSnippets = new List<Snippet>();
-			foreach (TagSnippetTableEntity pEntity in lEntityUnionSet) { lSnippets.Add(new Snippet(pEntity.RowKey, pEntity.TagList.Split(',').ToList())); }
+			foreach (TagSnippetTableEntity pEntity in lEntityIntersectSet) { lSnippets.Add(new Snippet(pEntity.RowKey, pEntity.TagList.Split(',').ToList())); }
 
 			return lSnippets;
+		}
+
+		private List<TagSnippetTableEntity> FindIntersection(List<TagSnippetTableEntity> l1, List<TagSnippetTableEntity> l2)
+		{
+			List<TagSnippetTableEntity> lIntersection = new List<TagSnippetTableEntity>();
+			
+			foreach (TagSnippetTableEntity pEntity in l1)
+			{
+				string sName = pEntity.RowKey;
+				foreach (TagSnippetTableEntity pEntity2 in l2)
+				{
+					if (pEntity2.RowKey == sName) { lIntersection.Add(pEntity); break; }
+				}
+			}
+
+			return lIntersection;
 		}
 
 		// reads content of snippet blob into the snippet instances

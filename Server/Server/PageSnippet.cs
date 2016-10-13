@@ -29,8 +29,22 @@ namespace KnowledgeBaseServer
 		public Snippet Snippet { get { return m_pSnippet; } set { m_pSnippet = value; } }
 
 		// methods
-		public string Build()
+		public string Build(int iMaxTagCount)
 		{
+			// adjust level based on relative tag count
+			if (this.Level == 0)
+			{
+				float pPercentage = (float)(this.Snippet.Tags.Count) / (float)(iMaxTagCount);
+				if (pPercentage <= .5) { this.Level = 0; }
+				else if (pPercentage <= .625) { this.Level = 1; }
+				else if (pPercentage <= .75) { this.Level = 2; }
+				else if (pPercentage <= .875) { this.Level = 3; }
+				else { this.Level = 4; }
+			}
+			
+			// adjust level if has an important tag
+			if (this.Snippet.Tags.Contains("Important") && this.Level < 4) { this.Level++; }
+		
 			string sHTML = "<div class='snippet";
 			// determine level of importance
 			switch (this.Level)

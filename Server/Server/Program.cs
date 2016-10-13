@@ -37,7 +37,7 @@ namespace KnowledgeBaseServer
 
 			//AddTestingSnippets();
 
-			string sPage = Query("Genetic_Algorithm");
+			string sPage = Query("Genetic_Algorithm,Theory");
 			
 			Console.WriteLine("Finished");
 			Console.WriteLine("\n" + sPage);
