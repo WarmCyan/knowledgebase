@@ -5,18 +5,26 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
+
+// TODO: expression for finding meta data:
+// <meta name='([a-zA-Z]*)' content='([a-zA-Z]*)'>
+// (capture group 1 is the name, capture group 2 is the content)
+
 namespace KnowledgeBaseServer
 {
 	public class Page
 	{
 		// static variables
-		private static List<string> s_lGenericTags = new List<string>() { "Definition", "Theory", "Argument", "Wisdom", "Note", "Depth" };
+		private static List<string> s_lGenericTags = new List<string>() { "Definition", "Theory", "Argument", "Wisdom", "Note", "Depth", "Important" };
 		
 		// member variables
 		private List<string> m_lQueryTags = new List<string>();
 		private string m_sInterestTag = "";
 		private List<Snippet> m_lOriginalSnippets = new List<Snippet>();
 		private List<PageSnippet> m_lPageSnippets = new List<PageSnippet>();
+
+		//private List
+		private Dictionary<string, List<PageSnippet>> m_dDepthSections = new Dictionary<string, List<PageSnippet>>();
 
 		// construction
 		public Page() { }
@@ -36,6 +44,8 @@ namespace KnowledgeBaseServer
 			this.HighLevelDefinitions();
 			this.HighLevelTheories();
 			this.NormalStuff();
+			this.Notes();
+			this.HandleTheDepths();
 
 			return this.BuildPage(sOriginalQuery);		
 		}
@@ -77,16 +87,30 @@ namespace KnowledgeBaseServer
 			foreach (PageSnippet pSnippet in lNormal) { sHTML += pSnippet.Build(); }
 			
 			// notes
-			//if (lNotes.Count > 0) { sHTML += "<div class='templatepart'><h2>Notes</h2></div>"; }
+			if (lNotes.Count > 0) { sHTML += "<div class='templatepart'><h3>Notes</h3></div>"; }
 			// TODO: don't forget can make other sections too 
 			foreach (PageSnippet pSnippet in lNotes) { sHTML += pSnippet.Build(); }
 			
 			if (lNormal.Count > 0 || lNotes.Count > 0) { sHTML += "<div class='separator'></div>"; }
 			
 			// depth
-			if (lDepth.Count > 0) { sHTML += "<div class='templatepart'><h2>Depth</h2></div>"; }
-			foreach (PageSnippet pSnippet in lDepth) { sHTML += pSnippet.Build(); }
-			
+			// TODO: make other sections based on unique (but similar) tags
+			//--------------------------------------------------------------------------------	
+			/*if (lDepth.Count > 0) { sHTML += "<div class='templatepart'><h2>Depth</h2></div>"; }
+			foreach (PageSnippet pSnippet in lDepth) { sHTML += pSnippet.Build(); }*/
+			//--------------------------------------------------------------------------------	
+			if (m_dDepthSections.Count > 0) { sHTML += "<div class='templatepart'><h2>Depth</h2></div>"; }
+			if (m_dDepthSections.ContainsKey("Normal")) // print non-section specific stuff FIRST
+			{
+				foreach (PageSnippet pSnippet in m_dDepthSections["Normal"]) { sHTML += pSnippet.Build(); }
+			}
+			foreach (string sSectionKey in m_dDepthSections.Keys) // print all other section stuff
+			{
+				if (sSectionKey == "Normal") { continue; }
+				sHTML += "<div class='templatepart'><h3>" + sSectionKey + "</h3></div>";
+				foreach (PageSnippet pSnippet in m_dDepthSections[sSectionKey]) { sHTML += pSnippet.Build(); }
+			}
+				
 			// arguments
 			if (lArguments.Count > 0) { sHTML += "<div class='templatepart'><h2>Arguments</h2></div>"; }
 			foreach (PageSnippet pSnippet in lArguments) { sHTML += pSnippet.Build(); }
@@ -137,14 +161,63 @@ namespace KnowledgeBaseServer
 		{
 			foreach (Snippet pSnippet in m_lOriginalSnippets)
 			{
-				if (!pSnippet.Tags.Contains("Theory") && !pSnippet.Tags.Contains("Definition") && !pSnippet.Tags.Contains("Notes") && !pSnippet.Tags.Contains("Depth") && !pSnippet.Tags.Contains("Argument"))
+				if (!pSnippet.Tags.Contains("Theory") && !pSnippet.Tags.Contains("Definition") && !pSnippet.Tags.Contains("Note") && !pSnippet.Tags.Contains("Depth") && !pSnippet.Tags.Contains("Argument"))
 				{
 					PageSnippet pPageSnippet = new PageSnippet(pSnippet, 0, PageSection.Normal);
 					m_lPageSnippets.Add(pPageSnippet);
 				}
 			}
 		}
+		private void Notes()
+		{
+			foreach (Snippet pSnippet in m_lOriginalSnippets)
+			{
+				if (pSnippet.Tags.Contains("Note") && !pSnippet.Tags.Contains("Depth"))
+				{
+					PageSnippet pPageSnippet = new PageSnippet(pSnippet, 0, PageSection.Notes);
+					m_lPageSnippets.Add(pPageSnippet);
+				}
+			}
+		}
 
+		private void HandleTheDepths()
+		{
+			// get all the snippets that are in depth
+			List<Snippet> lDeepSnippets = new List<Snippet>();
+			foreach (Snippet pSnippet in m_lOriginalSnippets)
+			{
+				if (pSnippet.Tags.Contains("Depth")) { lDeepSnippets.Add(pSnippet); }
+			}
+
+			// get tagged snippet lists (IGNORING SOURCE TAGS [use meta])
+			Dictionary<string, List<Snippet>> dTagOrganizedSnippets = new Dictionary<string, List<Snippet>>();
+			foreach (Snippet pSnippet in lDeepSnippets)
+			{
+				foreach (string sTag in pSnippet.Tags)
+				{
+					if (sTag == "Depth" || sTag == "Important" || sTag == pSnippet.SourceTag || sTag == m_sInterestTag) { continue; } 
+					if (dTagOrganizedSnippets.ContainsKey(sTag)) { dTagOrganizedSnippets[sTag].Add(pSnippet); }
+					else { dTagOrganizedSnippets.Add(sTag, new List<Snippet>() { pSnippet }); }
+				}
+			}
+
+			// TODO: SCALE this, like with importance level
+			foreach (string sKey in dTagOrganizedSnippets.Keys)
+			{
+				if (dTagOrganizedSnippets[sKey].Count > 1)
+				{
+					m_dDepthSections.Add(sKey, new List<PageSnippet>());
+					foreach (Snippet pSnippet in dTagOrganizedSnippets[sKey])
+					{
+						PageSnippet pPageSnippet = new PageSnippet(pSnippet, 0, PageSection.Depth);
+						m_dDepthSections[sKey].Add(pPageSnippet);
+					}
+				}
+			}
+		}
+
+
+		
 		private void DetermineInterestTag()
 		{
 			// go backwards and find first non generic tag
