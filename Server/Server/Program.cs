@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -40,6 +41,9 @@ namespace KnowledgeBaseServer
 			
 			Console.WriteLine("Finished");
 			Console.WriteLine("\n" + sPage);
+
+			File.WriteAllText("./output.html", sPage);
+			
 			Console.Read();
 		}
 
@@ -56,7 +60,7 @@ namespace KnowledgeBaseServer
 			//string sResponse = WebCommunications.SendGetRequest("http://dwlapi.azurewebsites.net/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/ConstructPage?squery=" + sTagList, true);
 			//string sResponse = WebCommunications.SendGetRequest("http://localhost:16651/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/ConstructPage?squery=" + sTagList, true);
 			KnowledgeServer ks = new KnowledgeServer();
-			string sResponse = ks.ConstructPage("Genetic_Algorithm");
+			string sResponse = ks.ConstructPage(sTagList);
 			return sResponse;
 		}
 
@@ -64,12 +68,12 @@ namespace KnowledgeBaseServer
 
 		public static void AddTestingSnippets()
 		{
-			AddSnippet("Definition,AI,Theory,Genetic_Algorithm,Wikipedia,Machine_Learning,Genetic_Algorithm_Definition", "<snippet><p><b>Genetic Algorithm</b> - A genetic algorithm is a metaheuristic inspired by the process of natural selection, commonly used to find solutions to optimization and search problems using mutation, crossover, and selection.</p></snippet><source tag='Wikipedia'>https://en.wikipedia.org/wiki/Genetic_algorithm</source>");
-			AddSnippet("Definition,Genetic_Algorithm,Wikipedia,Chromosome,Genotype,Chromosome_Definition", "<snippet><p>Chromosome/Genotype - Set of parameters which define a proposed solution to the problem that the genetic algorithm is trying to solve. Often a binary representation (binary string) or a string representation.</p></snippet><source tag='Wikipedia'>https://en.wikipedia.org/wiki/Chromosome_(genetic_algorithm)</source>");
-			AddSnippet("Note,Genetic_Algorithm,Wikipedia", "<snippet><p>\"GA's cannot effectively solve problems in which the only fitness measure is a single right/wrong measure (like decision problems), as there is no way to converge on the solution. However, if the situation allows the success/failure trial to be repeated giving different results, then the ratio of successes to failures provides a suitable fitness measure.\"</p></snippet><source tag='Wikipedia'>https://en.wikipedia.org/wiki/Genetic_algorithm</source>");
-			AddSnippet("Depth,Implementation,Genetic_Algorithm,Obitko", "<snippet><ol><li>Start - Generate random population of n chromosomes (suitable solutions to problem)</li><li>Fitness - Evaluate the fitness f(x) of each chromosome x in the population</li><li>New population - Create a new population by repeating the following steps until the new population is complete<ol><li>Selection - Select two parent chromosomes from a population according to their fitness (the better fitness, the bigger chance to be selected)</li><li>Crossover - With a crossover probability cross over the parents to form a new offspring (children). If no crossover was performed, offspring is an exact copy of parents.</li><li>Mutation - With a mutation probability mutate new offspring at each locus (position in chromosome)</li><li>Accepting - Place new offspring in a population</li></ol></li><li>Replace - Use new generated population for a further run of algorithm</li><li>Test - If the end condition is satisfied, stop, and return the best soultion in current population.</li><li>Loop - Go to step 2</li></ol></snippet><source tag='Obitko'>http://www.obitko.com/tutorials/genetic-algorithms/ga-basic-description.php</source>");
-			AddSnippet("Depth,Implementation,Note,Genetic_Algorithm,Initial,Franklin", "<snippet><p>Generating initial population: \"First forms an initial population by randomly choosing values (alleles) for each of the features (genes)\"</snippet><source tag='Franklin'>Franklin 177</source>");
-			AddSnippet("Theory,AI,Church-Turing_Thesis,Franklin,Church-Turing_Thesis_Theory", "<snippet><p>Church-Turing Thesis - \"Any effective procedure (algorithm) can be implemented via a Turing machine.\"</p></snippet><source tag='Franklin'>Franklin 79</source>");
+			AddSnippet("Definition,AI,Theory,Genetic_Algorithm,Wikipedia,Machine_Learning,Genetic_Algorithm_Definition", "<meta name='sourceTag' content='Wikipedia'><meta name='source' content='https://en.wikipedia.org/wiki/Genetic_algorithm'><p><b>Genetic Algorithm</b> - A genetic algorithm is a metaheuristic inspired by the process of natural selection, commonly used to find solutions to optimization and search problems using mutation, crossover, and selection.</p>");
+			AddSnippet("Definition,Genetic_Algorithm,Wikipedia,Chromosome,Genotype,Chromosome_Definition", "<meta name='sourceTag' content='Wikipedia'><meta name='source' content='https://en.wikipedia.org/wiki/Chromosome_(genetic_algorithm)'><p>Chromosome/Genotype - Set of parameters which define a proposed solution to the problem that the genetic algorithm is trying to solve. Often a binary representation (binary string) or a string representation.</p>");
+			AddSnippet("Note,Genetic_Algorithm,Wikipedia", "<meta name='sourceTag' content='Wikipedia'><meta name='source' content='https://en.wikipedia.org/wiki/Genetic_algorithm'><p>\"GA's cannot effectively solve problems in which the only fitness measure is a single right/wrong measure (like decision problems), as there is no way to converge on the solution. However, if the situation allows the success/failure trial to be repeated giving different results, then the ratio of successes to failures provides a suitable fitness measure.\"</p>");
+			AddSnippet("Depth,Implementation,Genetic_Algorithm,Obitko", "<meta name='sourceTag' content='Obitko'><meta name='source' content='http://www.obitko.com/tutorials/genetic-algorithms/ga-basic-description.php'><ol><li>Start - Generate random population of n chromosomes (suitable solutions to problem)</li><li>Fitness - Evaluate the fitness f(x) of each chromosome x in the population</li><li>New population - Create a new population by repeating the following steps until the new population is complete<ol><li>Selection - Select two parent chromosomes from a population according to their fitness (the better fitness, the bigger chance to be selected)</li><li>Crossover - With a crossover probability cross over the parents to form a new offspring (children). If no crossover was performed, offspring is an exact copy of parents.</li><li>Mutation - With a mutation probability mutate new offspring at each locus (position in chromosome)</li><li>Accepting - Place new offspring in a population</li></ol></li><li>Replace - Use new generated population for a further run of algorithm</li><li>Test - If the end condition is satisfied, stop, and return the best soultion in current population.</li><li>Loop - Go to step 2</li></ol>");
+			AddSnippet("Depth,Implementation,Note,Genetic_Algorithm,Initial,Franklin", "<meta name='sourceTag' content='Franklin'><meta name='source' content='Franklin 177'><p>Generating initial population: \"First forms an initial population by randomly choosing values (alleles) for each of the features (genes)\"</p>");
+			AddSnippet("Theory,AI,Church-Turing_Thesis,Franklin,Church-Turing_Thesis_Theory", "<meta name='source' content='Franklin'><meta name='source' content='Franklin 79'><p>Church-Turing Thesis - \"Any effective procedure (algorithm) can be implemented via a Turing machine.\"</p>");
 		}
 	}
 }

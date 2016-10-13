@@ -84,6 +84,7 @@
   <ItemGroup>
     <Compile Include="KnowledgeServer.cs" />
     <Compile Include="PageConstructor.cs" />
+    <Compile Include="PageSnippet.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Snippet.cs" />

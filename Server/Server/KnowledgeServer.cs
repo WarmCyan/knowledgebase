@@ -103,7 +103,8 @@ namespace KnowledgeBaseServer
 			// split up the query into the list of tags
 			List<Snippet> lSnippets = this.QuerySnippetList(sQuery.Split(',').ToList());
 			FillSnippetsContent(lSnippets);
-			return PageConstructor.Construct(sQuery, lSnippets);
+			Page pPage = new Page();
+			return pPage.Construct(sQuery, lSnippets);
 		}
 
 		// gets a list of the snippet "file" names for the given list of query tags
