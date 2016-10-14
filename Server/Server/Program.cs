@@ -57,10 +57,15 @@ namespace KnowledgeBaseServer
 
 		public static string Query(string sTagList)
 		{
-			//string sResponse = WebCommunications.SendGetRequest("http://dwlapi.azurewebsites.net/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/ConstructPage?squery=" + sTagList, true);
+			string sResponse = WebCommunications.SendGetRequest("http://dwlapi.azurewebsites.net/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/ConstructPage?squery=" + sTagList, true);
 			//string sResponse = WebCommunications.SendGetRequest("http://localhost:16651/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/ConstructPage?squery=" + sTagList, true);
-			KnowledgeServer ks = new KnowledgeServer();
-			string sResponse = ks.ConstructPage(sTagList);
+			//KnowledgeServer ks = new KnowledgeServer();
+			//string sResponse = ks.ConstructPage(sTagList);
+
+			// sanitize, because my webservice is still doing weird things
+			sResponse = sResponse.Trim('\"');
+			sResponse = sResponse.Replace("\\\"", "\"");
+			 
 			return sResponse;
 		}
 

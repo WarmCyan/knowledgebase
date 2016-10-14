@@ -69,9 +69,12 @@ namespace KnowledgeBaseServer
 					sHTML += " primary";
 					break;
 			}
-			sHTML += "' onmouseover='SnippetOnMouseOver(" + this.ID.ToString() + ")' onclick='SnippetOnClick(" + this.ID.ToString() + ")'>";
+			//sHTML += "' onmouseover='SnippetOnMouseOver(" + this.ID.ToString() + ")' onclick='SnippetOnClick(" + this.ID.ToString() + ")'>";
+			sHTML += "'>";
+			sHTML += "<meta name='snippetFileName' content='" + this.Snippet.FileName + "'>";
 			sHTML += this.Snippet.Content;
-			sHTML += "<p class='sourcetext' id='snippetsource" + this.ID.ToString() + "' onclick='SnippetSourceOnClick(" + this.ID.ToString() + ")' onmouseover='SnippetSourceOnMouseOver(" + this.ID.ToString() + ")'>source</p></div>";
+			sHTML += "</div>";
+			//sHTML += "<p class='sourcetext' id='snippetsource" + this.ID.ToString() + "' onclick='SnippetSourceOnClick(" + this.ID.ToString() + ")' onmouseover='SnippetSourceOnMouseOver(" + this.ID.ToString() + ")'>source</p></div>";
 
 			return sHTML;
 		}
