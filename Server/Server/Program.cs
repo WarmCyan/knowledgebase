@@ -35,9 +35,9 @@ namespace KnowledgeBaseServer
 
 			//string sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/AddSnippet", sBody, true);
 
-			//AddTestingSnippets();
+			AddTestingSnippets();
 
-			string sPage = Query("Genetic_Algorithm");
+			string sPage = Query("Church-Turing_Thesis");
 			
 			Console.WriteLine("Finished");
 			Console.WriteLine("\n" + sPage);
@@ -57,10 +57,10 @@ namespace KnowledgeBaseServer
 
 		public static string Query(string sTagList)
 		{
-			string sResponse = WebCommunications.SendGetRequest("http://dwlapi.azurewebsites.net/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/ConstructPage?squery=" + sTagList, true);
+			//string sResponse = WebCommunications.SendGetRequest("http://dwlapi.azurewebsites.net/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/ConstructPage?squery=" + sTagList, true);
 			//string sResponse = WebCommunications.SendGetRequest("http://localhost:16651/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/ConstructPage?squery=" + sTagList, true);
-			//KnowledgeServer ks = new KnowledgeServer();
-			//string sResponse = ks.ConstructPage(sTagList);
+			KnowledgeServer ks = new KnowledgeServer();
+			string sResponse = ks.ConstructPage(sTagList);
 
 			// sanitize, because my webservice is still doing weird things
 			sResponse = sResponse.Trim('\"');
@@ -78,7 +78,7 @@ namespace KnowledgeBaseServer
 			AddSnippet("Note,Genetic_Algorithm,Wikipedia", "<meta name='sourceTag' content='Wikipedia'><meta name='source' content='https://en.wikipedia.org/wiki/Genetic_algorithm'><p>\"GA's cannot effectively solve problems in which the only fitness measure is a single right/wrong measure (like decision problems), as there is no way to converge on the solution. However, if the situation allows the success/failure trial to be repeated giving different results, then the ratio of successes to failures provides a suitable fitness measure.\"</p>");
 			AddSnippet("Depth,Implementation,Genetic_Algorithm,Obitko", "<meta name='sourceTag' content='Obitko'><meta name='source' content='http://www.obitko.com/tutorials/genetic-algorithms/ga-basic-description.php'><ol><li>Start - Generate random population of n chromosomes (suitable solutions to problem)</li><li>Fitness - Evaluate the fitness f(x) of each chromosome x in the population</li><li>New population - Create a new population by repeating the following steps until the new population is complete<ol><li>Selection - Select two parent chromosomes from a population according to their fitness (the better fitness, the bigger chance to be selected)</li><li>Crossover - With a crossover probability cross over the parents to form a new offspring (children). If no crossover was performed, offspring is an exact copy of parents.</li><li>Mutation - With a mutation probability mutate new offspring at each locus (position in chromosome)</li><li>Accepting - Place new offspring in a population</li></ol></li><li>Replace - Use new generated population for a further run of algorithm</li><li>Test - If the end condition is satisfied, stop, and return the best soultion in current population.</li><li>Loop - Go to step 2</li></ol>");
 			AddSnippet("Depth,Implementation,Note,Genetic_Algorithm,Initial,Franklin", "<meta name='sourceTag' content='Franklin'><meta name='source' content='Franklin 177'><p>Generating initial population: \"First forms an initial population by randomly choosing values (alleles) for each of the features (genes)\"</p>");
-			AddSnippet("Theory,AI,Church-Turing_Thesis,Franklin,Church-Turing_Thesis_Theory", "<meta name='source' content='Franklin'><meta name='source' content='Franklin 79'><p>Church-Turing Thesis - \"Any effective procedure (algorithm) can be implemented via a Turing machine.\"</p>");
+			AddSnippet("Theory,AI,Church-Turing_Thesis,Franklin,Church-Turing_Thesis_Theory", "<meta name='sourceTag' content='Franklin'><meta name='source' content='Franklin 79'><p>Church-Turing Thesis - \"Any effective procedure (algorithm) can be implemented via a Turing machine.\"</p>");
 		}
 	}
 }
