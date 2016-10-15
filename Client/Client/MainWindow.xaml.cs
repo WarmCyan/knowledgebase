@@ -21,10 +21,16 @@ namespace Client
 {
 	public partial class MainWindow : Window
 	{
+		// static variables
+		//private static int s_iTitleBarOffset = 40;
+
+		// member variables
+		private Page m_pActivePage;
+		private bool m_bPageRendered = false;
+
 		public MainWindow()
 		{
 			InitializeComponent();
-			
 			WebCommunications.AuthKey = "54003c32a190b6063fe06a528bc230ce151b589512db4a39ecf8ac01be393dafa154f39bde1f56e690f4c3c2870323972240d4d02fc4fa2f3349dc7ef4c7dc09";
 
 			// make rendering not suck
@@ -35,12 +41,7 @@ namespace Client
 			// read in sample HTML
 			//string sSample = File.ReadAllText(@"C:\dwl\lab\KnowledgeBase\Client\sample.html");
 
-			
-			/*Page pPage = new Page();
-			pPage.Height = 800;
-			pPage.FillHtml(sSample);
-			stkDocContainer.Children.Add(pPage);*/
-			this.Query("AI");
+			this.Query("Genetic_Algorithm");
 		}
 
 		private void Query(string sQuery)
@@ -51,11 +52,31 @@ namespace Client
 			// sanitize
 			sResponse = sResponse.Trim('\"');
 			sResponse = sResponse.Replace("\\\"", "\"");
-			
-			Page pPage = new Page();
-			pPage.Height = 800;
-			pPage.FillHtml(sResponse);
-			stkDocContainer.Children.Add(pPage);
+
+			if(m_bPageRendered) { cnvsMain.Children.Remove(m_pActivePage); }
+			m_pActivePage = new Page();
+			m_pActivePage.FillHtml(sResponse);
+			//stkDocContainer.Children.Add(m_pActivePage);
+			cnvsMain.Children.Add(m_pActivePage); 
+			m_bPageRendered = true;
+			this.UpdatePageSize();
+		}
+
+		//private void UpdatePageSize() { m_pActivePage.Height = this.ActualHeight - s_iTitleBarOffset; }
+		private void UpdatePageSize() 
+		{ 
+			m_pActivePage.Height = cnvsMain.ActualHeight/* - s_iTitleBarOffset*/;
+			m_pActivePage.Width = cnvsMain.ActualWidth;
+		}
+
+		private void Window_SizeChanged(object sender, SizeChangedEventArgs e) { UpdatePageSize(); }
+
+		private void TextBox_KeyUp(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Enter)
+			{
+				this.Query(txtQueryBox.Text);
+			}
 		}
 	}
 }

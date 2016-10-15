@@ -5,18 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
-        Title="MainWindow" Height="550" Width="800"
-		Background="#222222">
-	<Window.Resources>
-		<Style x:Key="BlockStyle" TargetType="Grid">
-			<Setter Property="Margin" Value="30"/>
-			<Setter Property="Height" Value="auto"/>
-			<Setter Property="Background" Value="#333333"/>
-		</Style>
-	</Window.Resources>
+        Title="MainWindow" Height="650" Width="950"
+		Background="#222222" SizeChanged="Window_SizeChanged">
     <Grid>
-		<ScrollViewer Name="svMain">
-			<StackPanel Name="stkDocContainer"></StackPanel>
-		</ScrollViewer>
+		<TextBox Name="txtQueryBox" Height="30" VerticalAlignment="Top" Background="#151515" Padding="5" Foreground="White" BorderBrush="#FFAA11" BorderThickness="0,0,0,2" Panel.ZIndex="5" KeyUp="TextBox_KeyUp">
+		</TextBox>
+		<!--<StackPanel Name="stkDocContainer"></StackPanel>-->
+		<Canvas Name="cnvsMain" Panel.ZIndex="0"></Canvas>
     </Grid>
 </Window>
