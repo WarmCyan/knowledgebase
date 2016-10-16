@@ -69,14 +69,40 @@ namespace Client
 			m_pActivePage.Width = cnvsMain.ActualWidth;
 		}
 
+		private void HideSearchBox() { txtQueryBox.Opacity = 0; }
+		private void ShowSearchBox() { txtQueryBox.Opacity = .8; }
+
 		private void Window_SizeChanged(object sender, SizeChangedEventArgs e) { UpdatePageSize(); }
 
-		private void TextBox_KeyUp(object sender, KeyEventArgs e)
+		private void txtQueryBox_KeyUp(object sender, KeyEventArgs e)
 		{
-			if (e.Key == Key.Enter)
-			{
+			if (e.Key == Key.Enter) 
+			{ 
 				this.Query(txtQueryBox.Text);
+				Keyboard.ClearFocus();
+				txtQueryBox.Focusable = false;
+				this.Focus();
 			}
 		}
+
+		private void txtQueryBox_MouseDown(object sender, MouseButtonEventArgs e)
+		{
+			txtQueryBox.Focusable = true;
+			txtQueryBox.Focus();
+			txtQueryBox.SelectAll();
+			e.Handled = true;
+		}
+
+		private void Window_KeyUp(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.OemQuestion)
+			{
+				txtQueryBox.Focusable = true;
+				txtQueryBox.Focus();
+				txtQueryBox.SelectAll();
+				e.Handled = true;
+			}
+		}
+
 	}
 }
