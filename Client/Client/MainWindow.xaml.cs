@@ -36,8 +36,8 @@ namespace Client
 		{
 			InitializeComponent();
 			WebCommunications.AuthKey = "54003c32a190b6063fe06a528bc230ce151b589512db4a39ecf8ac01be393dafa154f39bde1f56e690f4c3c2870323972240d4d02fc4fa2f3349dc7ef4c7dc09";
-			m_dPageStack = new Dictionary<string, Page>();
-			m_dPageStackLabels = new Dictionary<string, Border>();
+			m_dPageStack = new Dictionary<string, Page>(); // collection of pages with their associated query strings
+			m_dPageStackLabels = new Dictionary<string, Border>(); // collection of the sidebar page labels with associated query strings
 
 			// make rendering not suck
 			CefSettings pSettings = new CefSettings();
@@ -70,12 +70,10 @@ namespace Client
 			// add new page to things
 			this.AddPageToStack(sQuery, m_pActivePage);
 			this.DisplayActivePage();
-			//cnvsMain.Children.Add(m_pActivePage); 
-			//m_bPageRendered = true;
 			this.UpdatePageSize();
 		}
 
-		private void RemoveActivePage() { if (m_bPageRendered) { cnvsMain.Children.Remove(m_pActivePage); } m_bPageRendered = false; }
+		private void RemoveActivePage() { if (m_bPageRendered) { cnvsMain.Children.Remove(m_pActivePage); } m_bPageRendered = false; m_sActiveQuery = ""; }
 		private void DisplayActivePage() { cnvsMain.Children.Add(m_pActivePage); m_bPageRendered = true; }
 
 		private void ShowPage(string sQuery)
@@ -100,23 +98,17 @@ namespace Client
 				}
 				this.DisplayActivePage();
 			}
-			// if didn't alreayd have this page, query it
+			// if didn't already have this page, query it
 			else { this.Query(sQuery); }
 
-			// highlight the current one
+			// highlight the current label in the sidebar
 			foreach (Border pBorder in stkPageStack.Children)
 			{
-				if (pBorder.Child is TextBlock)
+				if (pBorder.Child is Grid)
 				{
-					TextBlock pTxtLabel = (TextBlock)pBorder.Child;
-					if (pTxtLabel.Text == sQuery)
-					{
-						pBorder.Background = new SolidColorBrush(Color.FromArgb(255, 69, 186, 255));
-					}
-					else 
-					{
-						pBorder.Background = new SolidColorBrush(Color.FromArgb(100, 40, 40, 40));
-					}
+					TextBlock pTxtLabel = (TextBlock)((Grid)pBorder.Child).Children[0];
+					if (pTxtLabel.Text == sQuery) { pBorder.Background = new SolidColorBrush(Color.FromArgb(255, 69, 186, 255)); }
+					else { pBorder.Background = new SolidColorBrush(Color.FromArgb(100, 40, 40, 40)); }
 				}
 			}
 		}
@@ -129,35 +121,46 @@ namespace Client
 			pBorder.BorderThickness = new Thickness(0, 0, 0, 1);
 			pBorder.BorderBrush = new SolidColorBrush(Color.FromArgb(100, 70, 70, 70));
 			pBorder.Background = new SolidColorBrush(Color.FromArgb(100, 40, 40, 40));
+			pBorder.MouseEnter += delegate { if (sQuery != m_sActiveQuery) { pBorder.Background = new SolidColorBrush(Color.FromArgb(100, 60, 60, 60)); } };
+			pBorder.MouseLeave += delegate { if (sQuery != m_sActiveQuery) { pBorder.Background = new SolidColorBrush(Color.FromArgb(100, 40, 40, 40)); } };
+
+			Grid pGrid = new Grid();
 			
 			TextBlock pTxtLabel = new TextBlock();
 			pTxtLabel.Text = sQuery;
 			pTxtLabel.Foreground = new SolidColorBrush(Colors.White);
 			pTxtLabel.Padding = new Thickness(10);
-			pTxtLabel.MouseUp += delegate { this.ShowPage(sQuery); };
-			pTxtLabel.MouseEnter += delegate 
-			{
-				if (sQuery != m_sActiveQuery) { pBorder.Background = new SolidColorBrush(Color.FromArgb(100, 60, 60, 60)); }
-			};
-			pTxtLabel.MouseLeave += delegate 
-			{
-				if (sQuery != m_sActiveQuery) { pBorder.Background = new SolidColorBrush(Color.FromArgb(100, 40, 40, 40)); }
-			};
+			pTxtLabel.HorizontalAlignment = HorizontalAlignment.Stretch;
+			pTxtLabel.MouseUp += delegate { this.ShowPage(sQuery); }; // NOTE: this is here because if on border, and user clicks on exit, it registers for both exit AND border!
 
-			pBorder.Child = pTxtLabel;
+			TextBlock pTxtExit = new TextBlock();
+			pTxtExit.Text = "x";
+			pTxtExit.Foreground = new SolidColorBrush(Colors.White);
+			pTxtExit.Padding = new Thickness(10,8,10,0);
+			pTxtExit.HorizontalAlignment = HorizontalAlignment.Right;
+			pTxtExit.MouseUp += delegate
+			{
+				if (sQuery == m_sActiveQuery) { this.RemoveActivePage(); }
+				m_dPageStack.Remove(sQuery);
+				stkPageStack.Children.Remove(m_dPageStackLabels[sQuery]);
+				m_dPageStackLabels.Remove(sQuery);
+			};
+			pTxtExit.MouseEnter += delegate { pTxtExit.Foreground = new SolidColorBrush(Colors.Red); };
+			pTxtExit.MouseLeave += delegate { pTxtExit.Foreground = new SolidColorBrush(Colors.White); };
+
+			pGrid.Children.Add(pTxtLabel);
+			pGrid.Children.Add(pTxtExit);
+			pBorder.Child = pGrid;
 			stkPageStack.Children.Add(pBorder);
 			m_dPageStackLabels.Add(sQuery, pBorder);
 		}
 
-		//private void UpdatePageSize() { m_pActivePage.Height = this.ActualHeight - s_iTitleBarOffset; }
+		// update the size of the browser 
 		private void UpdatePageSize() 
 		{ 
-			m_pActivePage.Height = cnvsMain.ActualHeight/* - s_iTitleBarOffset*/;
+			m_pActivePage.Height = cnvsMain.ActualHeight;
 			m_pActivePage.Width = cnvsMain.ActualWidth;
 		}
-
-		private void HideSearchBox() { txtQueryBox.Opacity = 0; }
-		private void ShowSearchBox() { txtQueryBox.Opacity = .8; }
 
 		private void Window_SizeChanged(object sender, SizeChangedEventArgs e) { UpdatePageSize(); }
 
@@ -165,7 +168,6 @@ namespace Client
 		{
 			if (e.Key == Key.Enter) 
 			{
-				//this.Query(txtQueryBox.Text);
 				this.ShowPage(txtQueryBox.Text);
 				Keyboard.ClearFocus();
 				txtQueryBox.Focusable = false;
@@ -190,7 +192,10 @@ namespace Client
 				txtQueryBox.SelectAll();
 				e.Handled = true;
 			}
+			else if (e.Key == Key.F5)
+			{
+				if (m_bPageRendered) { m_pActivePage.Refresh(); }
+			}
 		}
-
 	}
 }

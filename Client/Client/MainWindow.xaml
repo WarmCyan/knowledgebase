@@ -18,7 +18,7 @@
 					<RowDefinition Height="Auto"/>
 					<RowDefinition Height="*"/>
 				</Grid.RowDefinitions>
-				<TextBox Grid.Row="0" Name="txtQueryBox" Height="30" VerticalAlignment="Top" Background="#151515" Padding="5" 
+				<TextBox Grid.Row="0" Name="txtQueryBox" VerticalAlignment="Top" Background="#151515" Padding="10" 
 					Foreground="White" BorderBrush="#444444" BorderThickness="0,0,0,2" Panel.ZIndex="5" 
 					KeyUp="txtQueryBox_KeyUp" MouseDown="txtQueryBox_MouseDown"/>
 				<ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" VerticalAlignment="Stretch">
