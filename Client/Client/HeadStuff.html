@@ -1,1 +1,29 @@
 <script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+<script type="text/javascript">
+	function SnippetSourceOnClick(id)
+	{
+		//alert(id);
+		// get the meta for the source and the tag
+		var divRoot = document.getElementById("snippet" + id);
+
+		var metas = divRoot.getElementsByTagName("meta");
+
+		var sourceName = "";
+		var sourceText = "";
+
+		// go through each meta tag
+		for (var i = 0; i < metas.length; i++)
+		{
+			var meta = metas[i];
+
+			var name = meta.getAttribute("name");
+			var content = meta.getAttribute("content");
+
+			if (name == "sourceTag") sourceName = content;
+			if (name == "source") sourceText = content;
+		}
+
+		//sourceDisplay.displaySource(sourceName, sourceText);
+		sourceDisplay.displaySource(sourceName, sourceText);
+	}
+</script>

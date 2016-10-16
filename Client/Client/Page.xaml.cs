@@ -30,6 +30,7 @@ namespace Client
 		private string m_sHeaderCode;
 		private string m_sHtml;
 		private bool m_bIsEmpty = false;
+		private string m_sFauxURL = "http://page.html";
 		
 		public Page()
 		{
@@ -48,10 +49,9 @@ namespace Client
 		{
 			if (sHtml == "") { m_bIsEmpty = true; }
 			m_sHtml = "<html><head>" + m_sHeaderCode + "<style>" + m_sCSS + "</style></head>" + sHtml + "</html>";
-			string sFauxURL = "http://page.html";
 
-			m_pBrowser.LoadHtml(m_sHtml, sFauxURL);
-			m_pBrowser.Address = sFauxURL;
+			m_pBrowser.LoadHtml(m_sHtml, m_sFauxURL);
+			m_pBrowser.Address = m_sFauxURL;
 		}
 
 		public bool IsBlank()
@@ -64,10 +64,8 @@ namespace Client
 
 		public void Refresh()
 		{
-			string sFauxURL = "http://page.html";
-
-			m_pBrowser.LoadHtml(m_sHtml, sFauxURL);
-			m_pBrowser.Address = sFauxURL;
+			m_pBrowser.LoadHtml(m_sHtml, m_sFauxURL);
+			m_pBrowser.Address = m_sFauxURL;
 		}
 
 
@@ -83,7 +81,24 @@ namespace Client
 			m_pBrowser = new ChromiumWebBrowser();
 			m_pBrowser.Height = this.Height;
 			m_pBrowser.Width = this.Width;
+			//m_pBrowser.RegisterJsObject("SourceDisplay", new PageMessageBox());
+			m_pBrowser.RegisterJsObject("sourceDisplay", new SourceDisplayer());
 			grdContent.Children.Add(m_pBrowser);
+		}
+	}
+
+	public class SourceDisplayer
+	{
+		public void DisplaySource(string sSourceName, string sSourceText)
+		{
+			Application.Current.Dispatcher.Invoke((Action)delegate {
+
+				//your code
+				PageMessageBox pMsgBox = new PageMessageBox();
+				pMsgBox.SetData(sSourceName, sSourceText);
+				pMsgBox.Show();
+
+			});
 		}
 	}
 }
