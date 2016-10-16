@@ -28,6 +28,8 @@ namespace Client
 		private ChromiumWebBrowser m_pBrowser;
 		private string m_sCSS;
 		private string m_sHeaderCode;
+		private string m_sHtml;
+		private bool m_bIsEmpty = false;
 		
 		public Page()
 		{
@@ -37,14 +39,38 @@ namespace Client
 			this.GetHeaderHTML();
 		}
 
+		// properties
+		public bool Empty { get { return m_bIsEmpty; } set { m_bIsEmpty = value; } }
+
+		// functions
+
 		public void FillHtml(string sHtml)
 		{
-			sHtml = "<html><head>" + m_sHeaderCode + "<style>" + m_sCSS + "</style></head>" + sHtml + "</html>";
+			if (sHtml == "") { m_bIsEmpty = true; }
+			m_sHtml = "<html><head>" + m_sHeaderCode + "<style>" + m_sCSS + "</style></head>" + sHtml + "</html>";
 			string sFauxURL = "http://page.html";
 
-			m_pBrowser.LoadHtml(sHtml, sFauxURL);
+			m_pBrowser.LoadHtml(m_sHtml, sFauxURL);
 			m_pBrowser.Address = sFauxURL;
 		}
+
+		public bool IsBlank()
+		{
+			Task<string> pSourceTask = m_pBrowser.GetSourceAsync();
+			pSourceTask.Wait();
+			if (pSourceTask.Result == "<html><head></head><body></body></html>") { return true; }
+			return false;
+		}
+
+
+		public void Refresh()
+		{
+			string sFauxURL = "http://page.html";
+
+			m_pBrowser.LoadHtml(m_sHtml, sFauxURL);
+			m_pBrowser.Address = sFauxURL;
+		}
+
 
 		// load the css
 		private void GetCSS() { m_sCSS = File.ReadAllText("./ClientStyle.css"); }

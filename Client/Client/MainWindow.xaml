@@ -5,19 +5,27 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
-        Title="MainWindow" Height="650" Width="950"
+        Title="MainWindow" Height="650" Width="1000"
 		Background="#222222" SizeChanged="Window_SizeChanged" KeyUp="Window_KeyUp">
     <Grid Name="grdMain" KeyUp="Window_KeyUp">
-		<!--<TextBox Name="txtQueryBox" Height="30" VerticalAlignment="Top" Background="#151515" Padding="5" Foreground="White" BorderBrush="#FFAA11" BorderThickness="0,0,0,2" Panel.ZIndex="5" KeyUp="txtQueryBox_KeyUp" MouseEnter="txtQueryBox_MouseEnter" MouseLeave="txtQueryBox_MouseLeave" LostKeyboardFocus="txtQueryBox_LostKeyboardFocus">
-		</TextBox>-->
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="250"/>
 			<ColumnDefinition Width="*"/>
 		</Grid.ColumnDefinitions>
 		<Border Grid.Column="0" BorderBrush="#444444" BorderThickness="0,0,2,0">
-			<StackPanel>
-				<TextBox Name="txtQueryBox" Height="30" VerticalAlignment="Top" Background="#151515" Padding="5" Foreground="White" BorderBrush="#444444" BorderThickness="0,0,0,2" Panel.ZIndex="5" KeyUp="txtQueryBox_KeyUp" MouseDown="txtQueryBox_MouseDown"/>
-			</StackPanel>
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="*"/>
+				</Grid.RowDefinitions>
+				<TextBox Grid.Row="0" Name="txtQueryBox" Height="30" VerticalAlignment="Top" Background="#151515" Padding="5" 
+					Foreground="White" BorderBrush="#444444" BorderThickness="0,0,0,2" Panel.ZIndex="5" 
+					KeyUp="txtQueryBox_KeyUp" MouseDown="txtQueryBox_MouseDown"/>
+				<ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" VerticalAlignment="Stretch">
+					<StackPanel Name="stkPageStack">
+					</StackPanel>
+				</ScrollViewer>
+			</Grid>
 		</Border>
 		<Canvas Grid.Column="1" Name="cnvsMain" Panel.ZIndex="0"></Canvas>
     </Grid>
