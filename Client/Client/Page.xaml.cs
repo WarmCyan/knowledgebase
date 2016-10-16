@@ -62,7 +62,6 @@ namespace Client
 			return false;
 		}
 
-
 		public void Refresh()
 		{
 			string sFauxURL = "http://page.html";

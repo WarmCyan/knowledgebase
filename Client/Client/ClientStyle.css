@@ -30,9 +30,6 @@ h1
 	color: #FFFFFF;
 }
 
-
-
-
 .primary
 {
 	/*border-left: 2px solid #3277AA;*/
@@ -43,8 +40,8 @@ h1
 }
 .primary p
 {
-	font-size: 18px !important;
-	line-height: 1.5 !important;
+	font-size: 18px; 
+	line-height: 1.5; 
 }
 
 .secondary
@@ -56,7 +53,8 @@ h1
 }
 .secondary p
 {
-	font-size: 16px; !important;
+	font-size: 16px; 
+	line-height: 1.5; 
 }
 
 .tertiary
@@ -68,23 +66,22 @@ h1
 }
 .tertiary p
 {
-	font-size: 14px !important;
+	font-size: 14px;
+	line-height: 1.5; 
 }
 
 
 .quaternary
 {
 	border-left: 4px solid #FF4433;
-	margin-left: 70 !important;
+	margin-left: 70px !important;
 	padding: 12px;
 	color: #FF4433;
 }
 .quaternary p
 {
-	font-size: 12px !important;
+	font-size: 12px;
 }
-
-
 
 .separator
 {
@@ -121,4 +118,13 @@ h1
 {
 	color: #EEEEEE;
 	margin-left: 20px;
+}
+
+.sourcetext
+{
+	color: #555555;
+	float: right;
+	display: block;
+	margin-top: -1.5%;
+	font-size: 12px !important;
 }

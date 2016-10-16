@@ -73,8 +73,8 @@ namespace KnowledgeBaseServer
 			sHTML += "'>";
 			sHTML += "<meta name='snippetFileName' content='" + this.Snippet.FileName + "'>";
 			sHTML += this.Snippet.Content;
-			sHTML += "</div>";
-			//sHTML += "<p class='sourcetext' id='snippetsource" + this.ID.ToString() + "' onclick='SnippetSourceOnClick(" + this.ID.ToString() + ")' onmouseover='SnippetSourceOnMouseOver(" + this.ID.ToString() + ")'>source</p></div>";
+			//sHTML += "</div>";
+			sHTML += "<p class='sourcetext' id='snippetsource" + this.ID.ToString() + "' onclick='SnippetSourceOnClick(" + this.ID.ToString() + ")'>source</p></div>";
 
 			return sHTML;
 		}

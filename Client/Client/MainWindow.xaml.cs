@@ -44,9 +44,6 @@ namespace Client
 			pSettings.SetOffScreenRenderingBestPerformanceArgs();
 			Cef.Initialize(pSettings);
 
-			// read in sample HTML
-			//string sSample = File.ReadAllText(@"C:\dwl\lab\KnowledgeBase\Client\sample.html");
-
 			this.ShowPage("Genetic_Algorithm");
 		}
 
@@ -113,10 +110,12 @@ namespace Client
 			}
 		}
 
+		// add the page to a list to "store" and add a clickable label for it to the sidebar
 		private void AddPageToStack(string sQuery, Page pPage)
 		{
 			m_dPageStack.Add(sQuery, pPage);
 
+			// border container
 			Border pBorder = new Border();
 			pBorder.BorderThickness = new Thickness(0, 0, 0, 1);
 			pBorder.BorderBrush = new SolidColorBrush(Color.FromArgb(100, 70, 70, 70));
@@ -126,6 +125,7 @@ namespace Client
 
 			Grid pGrid = new Grid();
 			
+			// query label
 			TextBlock pTxtLabel = new TextBlock();
 			pTxtLabel.Text = sQuery;
 			pTxtLabel.Foreground = new SolidColorBrush(Colors.White);
@@ -133,6 +133,7 @@ namespace Client
 			pTxtLabel.HorizontalAlignment = HorizontalAlignment.Stretch;
 			pTxtLabel.MouseUp += delegate { this.ShowPage(sQuery); }; // NOTE: this is here because if on border, and user clicks on exit, it registers for both exit AND border!
 
+			// close query button
 			TextBlock pTxtExit = new TextBlock();
 			pTxtExit.Text = "x";
 			pTxtExit.Foreground = new SolidColorBrush(Colors.White);
@@ -140,14 +141,15 @@ namespace Client
 			pTxtExit.HorizontalAlignment = HorizontalAlignment.Right;
 			pTxtExit.MouseUp += delegate
 			{
-				if (sQuery == m_sActiveQuery) { this.RemoveActivePage(); }
+				if (sQuery == m_sActiveQuery) { this.RemoveActivePage(); } // hide page if it's currently displayed
 				m_dPageStack.Remove(sQuery);
-				stkPageStack.Children.Remove(m_dPageStackLabels[sQuery]);
+				stkPageStack.Children.Remove(m_dPageStackLabels[sQuery]); // remove the label from the sidebar
 				m_dPageStackLabels.Remove(sQuery);
 			};
 			pTxtExit.MouseEnter += delegate { pTxtExit.Foreground = new SolidColorBrush(Colors.Red); };
 			pTxtExit.MouseLeave += delegate { pTxtExit.Foreground = new SolidColorBrush(Colors.White); };
 
+			// add all the things!
 			pGrid.Children.Add(pTxtLabel);
 			pGrid.Children.Add(pTxtExit);
 			pBorder.Child = pGrid;
@@ -192,10 +194,7 @@ namespace Client
 				txtQueryBox.SelectAll();
 				e.Handled = true;
 			}
-			else if (e.Key == Key.F5)
-			{
-				if (m_bPageRendered) { m_pActivePage.Refresh(); }
-			}
+			else if (e.Key == Key.F5) { if (m_bPageRendered) { m_pActivePage.Refresh(); } }
 		}
 	}
 }
