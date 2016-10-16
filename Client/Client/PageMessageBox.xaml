@@ -1,0 +1,16 @@
+﻿<Window x:Class="Client.PageMessageBox"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Client"
+        mc:Ignorable="d"
+        Title="MessageBox" Height="auto" Width="350" WindowStyle="None" Background="Transparent" AllowsTransparency="True" SizeToContent="Height" WindowStartupLocation="CenterScreen">
+	<Border Background="#282828" BorderBrush="#44BBFF" BorderThickness="0,0,0,5">
+		<Grid MouseDown="Grid_MouseDown" MouseUp="Grid_MouseUp">
+			<Label Name="lblTitle" Margin="20,15" Foreground="White" FontSize="30">Hello there</Label>
+			<TextBlock TextWrapping="Wrap" Name="txtContent" Margin="30,75,10,25" FontSize="12" Foreground="White" MouseDown="txtContent_MouseDown">Hi! I'm testing content!</TextBlock>
+			<Rectangle VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Margin="0,0,0,-5" Height="5" MouseDown="Rectangle_MouseDown" MouseUp="Rectangle_MouseUp"/>
+		</Grid>
+	</Border>
+</Window>
