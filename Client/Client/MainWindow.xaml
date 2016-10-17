@@ -17,6 +17,7 @@
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto"/>
 					<RowDefinition Height="*"/>
+					<RowDefinition Height="Auto"/>
 				</Grid.RowDefinitions>
 				<TextBox Grid.Row="0" Name="txtQueryBox" VerticalAlignment="Top" Background="#151515" Padding="10" 
 					Foreground="White" BorderBrush="#444444" BorderThickness="0,0,0,2" Panel.ZIndex="5" 
@@ -25,6 +26,11 @@
 					<StackPanel Name="stkPageStack">
 					</StackPanel>
 				</ScrollViewer>
+				<StackPanel Grid.Row="2">
+					<Border BorderBrush="#444444" BorderThickness="0,2,0,0">
+					<TextBlock TextAlignment="Center" Name="btnAddSnippet" Background="#151515" Foreground="White" Padding="10" MouseLeave="btnAddSnippet_MouseLeave" MouseEnter="btnAddSnippet_MouseEnter" MouseUp="btnAddSnippet_MouseUp">Add Snippet</TextBlock>
+					</Border>
+				</StackPanel>
 			</Grid>
 		</Border>
 		<Canvas Grid.Column="1" Name="cnvsMain" Panel.ZIndex="0"></Canvas>

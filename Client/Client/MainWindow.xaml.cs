@@ -196,5 +196,13 @@ namespace Client
 			}
 			else if (e.Key == Key.F5) { if (m_bPageRendered) { m_pActivePage.Refresh(); } }
 		}
+
+		private void btnAddSnippet_MouseLeave(object sender, MouseEventArgs e) { btnAddSnippet.Background = new SolidColorBrush(Color.FromRgb(21, 21, 21)); }
+		private void btnAddSnippet_MouseEnter(object sender, MouseEventArgs e) { btnAddSnippet.Background = new SolidColorBrush(Color.FromRgb(69, 186, 255)); }
+
+		private void btnAddSnippet_MouseUp(object sender, MouseButtonEventArgs e)
+		{
+			
+		}
 	}
 }

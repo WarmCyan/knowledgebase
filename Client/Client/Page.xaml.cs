@@ -92,12 +92,10 @@ namespace Client
 		public void DisplaySource(string sSourceName, string sSourceText)
 		{
 			Application.Current.Dispatcher.Invoke((Action)delegate {
-
-				//your code
 				PageMessageBox pMsgBox = new PageMessageBox();
-				pMsgBox.SetData(sSourceName, sSourceText);
-				pMsgBox.Show();
-
+				//pMsgBox.SetData(sSourceName, sSourceText);
+				//pMsgBox.Show();
+				pMsgBox.InformationalTextBox(sSourceName, sSourceText);
 			});
 		}
 	}

@@ -8,8 +8,8 @@
         Title="MessageBox" Height="auto" Width="350" WindowStyle="None" Background="Transparent" AllowsTransparency="True" SizeToContent="Height" WindowStartupLocation="CenterScreen">
 	<Border Background="#282828" BorderBrush="#44BBFF" BorderThickness="0,0,0,5">
 		<Grid MouseDown="Grid_MouseDown" MouseUp="Grid_MouseUp">
-			<Label Name="lblTitle" Margin="20,15" Foreground="White" FontSize="30">Hello there</Label>
-			<TextBlock TextWrapping="Wrap" Name="txtContent" Margin="30,75,10,25" FontSize="12" Foreground="White" MouseDown="txtContent_MouseDown">Hi! I'm testing content!</TextBlock>
+			<Label Name="lblTitle" Margin="20,10" Foreground="White" FontSize="30">Hello there</Label>
+			<TextBlock TextWrapping="Wrap" Name="txtContent" Margin="30,70,10,25" FontSize="12" Foreground="White" MouseDown="txtContent_MouseDown">Hi! I'm testing content!</TextBlock>
 			<Rectangle VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Margin="0,0,0,-5" Height="5" MouseDown="Rectangle_MouseDown" MouseUp="Rectangle_MouseUp"/>
 		</Grid>
 	</Border>

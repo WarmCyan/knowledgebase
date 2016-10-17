@@ -33,20 +33,17 @@ namespace Client
 			InitializeComponent();
 		}
 
-		public void SetData(string sTitle, string sContent)
+
+		public void InformationalTextBox(string sTitle, string sContent)
 		{
 			lblTitle.Content = sTitle;
 			txtContent.Text = sContent;
+			this.Show();
 		}
 
-		private void Rectangle_MouseDown(object sender, MouseButtonEventArgs e)
-		{
-			
-		}
+		private void Rectangle_MouseDown(object sender, MouseButtonEventArgs e) { }
 
-		private void Rectangle_MouseUp(object sender, MouseButtonEventArgs e)
-		{
-		}
+		private void Rectangle_MouseUp(object sender, MouseButtonEventArgs e) { }
 
 		private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
 		{
