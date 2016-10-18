@@ -27,7 +27,12 @@ h1
 
 .formula
 {
-	color: #FFFFFF;
+	color: #FFFFFF !important; 
+}
+
+.MathJax_Display, .MathJax, .MathJax_Preview, MathJax_CHTML, MathJax_CHTML_Display
+{
+	color: #FFFFFF !important;
 }
 
 .primary

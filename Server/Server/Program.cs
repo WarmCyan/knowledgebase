@@ -37,9 +37,9 @@ namespace KnowledgeBaseServer
 
 			//AddTestingSnippets();
 
-			//string sPage = Query("Church-Turing_Thesis");
+			string sPage = Query("Test");
 
-			string sPage = GetTags();
+			//string sPage = GetTags();
 			
 			Console.WriteLine("Finished");
 			Console.WriteLine("\n" + sPage);

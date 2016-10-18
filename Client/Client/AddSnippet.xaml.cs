@@ -83,6 +83,7 @@ namespace Client
 			lTags.Insert(0, "Definition");
 			lTags.Insert(0, "Argument");
 
+			// tags
 			foreach (string sTag in lTags)
 			{
 				// border container
@@ -97,41 +98,43 @@ namespace Client
 					if (txtTagList.Text != "") { txtTagList.Text += ","; }
 					txtTagList.Text += sTag;
 				};
-
-				//Grid pGrid = new Grid();
-
-				// query label
+				
+				// tag label
 				TextBlock pTxtLabel = new TextBlock();
 				pTxtLabel.Text = sTag;
 				pTxtLabel.Foreground = new SolidColorBrush(Colors.White);
 				pTxtLabel.Padding = new Thickness(10);
 				pTxtLabel.HorizontalAlignment = HorizontalAlignment.Stretch;
-				//pTxtLabel.MouseUp += delegate { this.ShowPage(sQuery); }; // NOTE: this is here because if on border, and user clicks on exit, it registers for both exit AND border!
-
-				// close query button
-				/*TextBlock pTxtExit = new TextBlock();
-				pTxtExit.Text = "x";
-				pTxtExit.Foreground = new SolidColorBrush(Colors.White);
-				pTxtExit.Padding = new Thickness(10, 8, 10, 0);
-				pTxtExit.HorizontalAlignment = HorizontalAlignment.Right;
-				pTxtExit.MouseUp += delegate
-				{
-					if (sQuery == m_sActiveQuery) { this.RemoveActivePage(); } // hide page if it's currently displayed
-					m_dPageStack.Remove(sQuery);
-					stkPageStack.Children.Remove(m_dPageStackLabels[sQuery]); // remove the label from the sidebar
-					m_dPageStackLabels.Remove(sQuery);
-				};
-				pTxtExit.MouseEnter += delegate { pTxtExit.Foreground = new SolidColorBrush(Colors.Red); };
-				pTxtExit.MouseLeave += delegate { pTxtExit.Foreground = new SolidColorBrush(Colors.White); };*/
 
 				// add all the things!
-				//pGrid.Children.Add(pTxtLabel);
-				//pGrid.Children.Add(pTxtExit);
 				pBorder.Child = pTxtLabel;
 				stkTags.Children.Add(pBorder);
-				//stkPageStack.Children.Add(pBorder);
-				//m_dPageStackLabels.Add(sQuery, pBorder);
 			}
+			
+			// sources
+			foreach (string sSource in lSources)
+			{
+				// border container
+				Border pBorder = new Border();
+				pBorder.BorderThickness = new Thickness(0, 0, 0, 1);
+				pBorder.BorderBrush = new SolidColorBrush(Color.FromArgb(100, 70, 70, 70));
+				pBorder.Background = new SolidColorBrush(Color.FromArgb(100, 40, 40, 40));
+				pBorder.MouseEnter += delegate { pBorder.Background = new SolidColorBrush(Color.FromArgb(100, 60, 60, 60)); };
+				pBorder.MouseLeave += delegate { pBorder.Background = new SolidColorBrush(Color.FromArgb(100, 40, 40, 40)); };
+				pBorder.MouseUp += delegate { lblSourceName.Content = sSource; };
+				
+				// tag label
+				TextBlock pTxtLabel = new TextBlock();
+				pTxtLabel.Text = sSource;
+				pTxtLabel.Foreground = new SolidColorBrush(Colors.White);
+				pTxtLabel.Padding = new Thickness(10);
+				pTxtLabel.HorizontalAlignment = HorizontalAlignment.Stretch;
+
+				// add all the things!
+				pBorder.Child = pTxtLabel;
+				stkSources.Children.Add(pBorder);
+			}
+	
 		}
 
 		private void btnSource_MouseLeave(object sender, MouseEventArgs e) { btnAddSource.Background = new SolidColorBrush(Color.FromRgb(21, 21, 21)); }
@@ -150,7 +153,20 @@ namespace Client
 		private void btnSubmit_MouseUp(object sender, MouseButtonEventArgs e)
 		{
 			// add snippet code here
-			
+			lblStatus.Content = "Submitting...";
+
+			string sContent = txtSnippetContent.Text;
+			string sTags = txtTagList.Text + "," + lblSourceName.Content;
+
+			// add meta tags
+			sContent = "<meta name='sourceTag' content='" + lblSourceName.Content + "'><meta name='source' content='" + txtSourceText.Text + "'>" + sContent;
+
+			// make the xml request body
+			string sBody = "<params><param name='sTagList'>" + sTags + "</param><param name='sSnippet'>" + Master.EncodeXML(sContent) + "</param></params>";
+			string sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/AddSnippet", sBody, true);
+
+			txtSnippetContent.Text = "";
+			lblStatus.Content = sResponse;
 		}
 	}
 }
