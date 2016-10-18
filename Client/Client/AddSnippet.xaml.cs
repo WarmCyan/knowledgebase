@@ -114,6 +114,9 @@ namespace Client
 			// sources
 			foreach (string sSource in lSources)
 			{
+				// fix text
+				string sFixedSource = sSource.Remove(sSource.IndexOf("source:"), "source:".Length);
+			
 				// border container
 				Border pBorder = new Border();
 				pBorder.BorderThickness = new Thickness(0, 0, 0, 1);
@@ -121,11 +124,11 @@ namespace Client
 				pBorder.Background = new SolidColorBrush(Color.FromArgb(100, 40, 40, 40));
 				pBorder.MouseEnter += delegate { pBorder.Background = new SolidColorBrush(Color.FromArgb(100, 60, 60, 60)); };
 				pBorder.MouseLeave += delegate { pBorder.Background = new SolidColorBrush(Color.FromArgb(100, 40, 40, 40)); };
-				pBorder.MouseUp += delegate { lblSourceName.Content = sSource; };
+				pBorder.MouseUp += delegate { lblSourceName.Content = sFixedSource; };
 				
 				// tag label
 				TextBlock pTxtLabel = new TextBlock();
-				pTxtLabel.Text = sSource;
+				pTxtLabel.Text = sFixedSource;
 				pTxtLabel.Foreground = new SolidColorBrush(Colors.White);
 				pTxtLabel.Padding = new Thickness(10);
 				pTxtLabel.HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -156,7 +159,7 @@ namespace Client
 			lblStatus.Content = "Submitting...";
 
 			string sContent = txtSnippetContent.Text;
-			string sTags = txtTagList.Text + "," + lblSourceName.Content;
+			string sTags = txtTagList.Text + ",source:" + lblSourceName.Content;
 
 			// add meta tags
 			sContent = "<meta name='sourceTag' content='" + lblSourceName.Content + "'><meta name='source' content='" + txtSourceText.Text + "'>" + sContent;
@@ -166,7 +169,14 @@ namespace Client
 			string sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/AddSnippet", sBody, true);
 
 			txtSnippetContent.Text = "";
-			lblStatus.Content = sResponse;
+
+			if (sResponse != "") { lblStatus.Content = "Error!"; File.WriteAllText(m_sBaseDir + "errordump.txt", sResponse); return; }
+			lblStatus.Content = "Submitted!";
+		}
+
+		private void txtSnippetContent_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			lblStatus.Content = "";
 		}
 	}
 }

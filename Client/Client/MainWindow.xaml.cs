@@ -45,7 +45,8 @@ namespace Client
 			pSettings.SetOffScreenRenderingBestPerformanceArgs();
 			Cef.Initialize(pSettings);
 
-			this.ShowPage("Genetic_Algorithm");
+			//this.ShowPage("Genetic_Algorithm");
+			this.ShowPage("Test");
 		}
 
 		private void Query(string sQuery)

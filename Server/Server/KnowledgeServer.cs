@@ -88,7 +88,7 @@ namespace KnowledgeBaseServer
 			{
 				TagTableEntity pTagEntity = new TagTableEntity(sTag);
 				pTagEntity.IsSource = false;
-				if (sTag.StartsWith("source:")) { continue; }
+				if (sTag.StartsWith("source:")) { pTagEntity.IsSource = true; }
 				lOperations.Add(TableOperation.InsertOrReplace(pTagEntity));
 				//pBatchOperation.InsertOrReplace(pTagEntity);
 			}

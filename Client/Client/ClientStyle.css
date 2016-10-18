@@ -25,12 +25,12 @@ h1
 	margin: 5px;
 }
 
-.formula
+/*.formula
 {
 	color: #FFFFFF !important; 
-}
+}*/
 
-.MathJax_Display, .MathJax, .MathJax_Preview, MathJax_CHTML, MathJax_CHTML_Display
+.MathJax_Display, .MathJax, .MathJax_Preview, MathJax_CHTML, MathJax_CHTML_Display, mjx-math
 {
 	color: #FFFFFF !important;
 }
