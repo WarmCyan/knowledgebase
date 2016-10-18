@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using DWL.Utility;
 using System.Web;
+using System.Configuration;
 
 namespace Client
 {
@@ -35,7 +36,7 @@ namespace Client
 		public MainWindow()
 		{
 			InitializeComponent();
-			WebCommunications.AuthKey = "54003c32a190b6063fe06a528bc230ce151b589512db4a39ecf8ac01be393dafa154f39bde1f56e690f4c3c2870323972240d4d02fc4fa2f3349dc7ef4c7dc09";
+			WebCommunications.AuthKey = ConfigurationManager.AppSettings["WebCommunicationsAuthKey"];
 			m_dPageStack = new Dictionary<string, Page>(); // collection of pages with their associated query strings
 			m_dPageStackLabels = new Dictionary<string, Border>(); // collection of the sidebar page labels with associated query strings
 
@@ -53,8 +54,9 @@ namespace Client
 			string sResponse = WebCommunications.SendGetRequest("http://dwlapi.azurewebsites.net/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/ConstructPage?squery=" + sFixedQuery, true);
 
 			// sanitize
-			sResponse = sResponse.Trim('\"');
-			sResponse = sResponse.Replace("\\\"", "\"");
+			//sResponse = sResponse.Trim('\"');
+			//sResponse = sResponse.Replace("\\\"", "\"");
+			sResponse = Master.CleanResponse(sResponse);
 
 			// clear canvas of last page
 			this.RemoveActivePage();
@@ -202,7 +204,8 @@ namespace Client
 
 		private void btnAddSnippet_MouseUp(object sender, MouseButtonEventArgs e)
 		{
-			
+			AddSnippet pSnippetWindow = new AddSnippet();
+			pSnippetWindow.Show();
 		}
 	}
 }

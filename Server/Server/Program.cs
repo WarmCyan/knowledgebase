@@ -35,9 +35,11 @@ namespace KnowledgeBaseServer
 
 			//string sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/AddSnippet", sBody, true);
 
-			AddTestingSnippets();
+			//AddTestingSnippets();
 
-			string sPage = Query("Church-Turing_Thesis");
+			//string sPage = Query("Church-Turing_Thesis");
+
+			string sPage = GetTags();
 			
 			Console.WriteLine("Finished");
 			Console.WriteLine("\n" + sPage);
@@ -66,6 +68,13 @@ namespace KnowledgeBaseServer
 			sResponse = sResponse.Trim('\"');
 			sResponse = sResponse.Replace("\\\"", "\"");
 			 
+			return sResponse;
+		}
+
+		public static string GetTags()
+		{
+			KnowledgeServer ks = new KnowledgeServer();
+			string sResponse = ks.ListTags();
 			return sResponse;
 		}
 

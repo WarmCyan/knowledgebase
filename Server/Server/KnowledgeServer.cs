@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Xml.Linq;
 
 using Microsoft.Azure;
 using Microsoft.WindowsAzure.Storage;
@@ -106,6 +107,33 @@ namespace KnowledgeBaseServer
 			Page pPage = new Page();
 			return pPage.Construct(sQuery, lSnippets);
 		}
+
+		public string ListTags()
+		{
+			List<TagTableEntity> lTagList = this.QueryTagList();
+			XElement pRoot = new XElement("Tags");
+
+			// construct a tag xml element foreach tag in the queried list
+			foreach (TagTableEntity pEntity in lTagList)
+			{
+				XElement pTagXml = new XElement("Tag");
+				pTagXml.SetAttributeValue("Source", pEntity.IsSource);
+				pTagXml.Value = pEntity.RowKey;
+
+				pRoot.Add(pTagXml);
+			}
+			return pRoot.ToString();
+		}
+
+		// non public methods
+
+		private List<TagTableEntity> QueryTagList()
+		{
+			// construct query
+			TableQuery<TagTableEntity> pQuery = new TableQuery<TagTableEntity>().Where("PartitionKey eq 'TAG'");
+			List<TagTableEntity> pQueryResult = this.Table.ExecuteQuery(pQuery).ToList();
+			return pQueryResult;
+		} 
 
 		// gets a list of the snippet "file" names for the given list of query tags
 		private List<Snippet> QuerySnippetList(List<string> lQueryTags)

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
-        Title="MainWindow" Height="650" Width="1000"
+        Title="KnowledgeBase" Height="650" Width="1000"
 		Background="#222222" SizeChanged="Window_SizeChanged" KeyUp="Window_KeyUp">
     <Grid Name="grdMain" KeyUp="Window_KeyUp">
 		<Grid.ColumnDefinitions>
@@ -28,7 +28,7 @@
 				</ScrollViewer>
 				<StackPanel Grid.Row="2">
 					<Border BorderBrush="#444444" BorderThickness="0,2,0,0">
-					<TextBlock TextAlignment="Center" Name="btnAddSnippet" Background="#151515" Foreground="White" Padding="10" MouseLeave="btnAddSnippet_MouseLeave" MouseEnter="btnAddSnippet_MouseEnter" MouseUp="btnAddSnippet_MouseUp">Add Snippet</TextBlock>
+						<TextBlock TextAlignment="Center" Name="btnAddSnippet" Background="#151515" Foreground="White" Padding="10" MouseLeave="btnAddSnippet_MouseLeave" MouseEnter="btnAddSnippet_MouseEnter" MouseUp="btnAddSnippet_MouseUp">Add Snippet</TextBlock>
 					</Border>
 				</StackPanel>
 			</Grid>
