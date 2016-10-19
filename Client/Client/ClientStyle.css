@@ -32,7 +32,7 @@ h1
 
 .MathJax_Display, .MathJax, .MathJax_Preview, MathJax_CHTML, MathJax_CHTML_Display, mjx-math
 {
-	color: #FFFFFF !important;
+	color: #FFFFFF; 
 }
 
 .primary

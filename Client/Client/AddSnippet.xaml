@@ -32,12 +32,14 @@
 			<TextBox Name="txtTagList" Padding="5" Margin="10,5" Foreground="White" Background="Transparent" BorderThickness="2" BorderBrush="#444444" TextWrapping="Wrap" CaretBrush="White"></TextBox>
 		</DockPanel>
 
-		<DockPanel Grid.Row="2" Grid.Column="0" LastChildFill="True" Height="38">
-			<Label Padding="5" Margin="10,5" Foreground="White">Source:</Label>
-			<Label Name="lblSourceName" Padding="5" Margin="0,5" Foreground="White"></Label>
-			<Border BorderBrush="#444444" BorderThickness="2" Margin="20,0,10,0" Height="38">
+		<!--<DockPanel Grid.Row="2" Grid.Column="0" LastChildFill="True" Height="38">-->
+		<DockPanel Grid.Row="2" Grid.Column="0" LastChildFill="True" Height="40">
+			<Label Padding="5" Margin="10,5,5,5" Foreground="White">Source:</Label>
+			<TextBox Name="txtSourceName" Padding="5" Margin="10,5" Foreground="White" Background="Transparent" BorderThickness="2" BorderBrush="#444444" CaretBrush="White"></TextBox>
+			<!--<Label Name="lblSourceName" Padding="5" Margin="0,5" Foreground="White"></Label>-->
+			<!--<Border BorderBrush="#444444" BorderThickness="2" Margin="20,0,10,0" Height="38">
 				<TextBlock TextAlignment="Center" Name="btnAddSource" Background="#151515" Padding="30,10" Foreground="White" MouseLeave="btnSource_MouseLeave" MouseEnter="btnSource_MouseEnter" MouseUp="btnSource_MouseUp">New Source</TextBlock>
-			</Border>
+			</Border>-->
 		</DockPanel>
 
 		<TextBox Name="txtSourceText" Grid.Row="3" Grid.Column="0" Padding="5" Margin="10,5" Foreground="White" Background="Transparent" BorderThickness="2" BorderBrush="#444444" TextWrapping="Wrap" CaretBrush="White" Height="75"></TextBox>

@@ -124,7 +124,8 @@ namespace Client
 				pBorder.Background = new SolidColorBrush(Color.FromArgb(100, 40, 40, 40));
 				pBorder.MouseEnter += delegate { pBorder.Background = new SolidColorBrush(Color.FromArgb(100, 60, 60, 60)); };
 				pBorder.MouseLeave += delegate { pBorder.Background = new SolidColorBrush(Color.FromArgb(100, 40, 40, 40)); };
-				pBorder.MouseUp += delegate { lblSourceName.Content = sFixedSource; };
+				//pBorder.MouseUp += delegate { lblSourceName.Content = sFixedSource; };
+				pBorder.MouseUp += delegate { txtSourceName.Text = sFixedSource; };
 				
 				// tag label
 				TextBlock pTxtLabel = new TextBlock();
@@ -140,9 +141,9 @@ namespace Client
 	
 		}
 
-		private void btnSource_MouseLeave(object sender, MouseEventArgs e) { btnAddSource.Background = new SolidColorBrush(Color.FromRgb(21, 21, 21)); }
+		/*private void btnSource_MouseLeave(object sender, MouseEventArgs e) { btnAddSource.Background = new SolidColorBrush(Color.FromRgb(21, 21, 21)); }
 
-		private void btnSource_MouseEnter(object sender, MouseEventArgs e) { btnAddSource.Background = new SolidColorBrush(Color.FromRgb(69, 186, 255)); }
+		private void btnSource_MouseEnter(object sender, MouseEventArgs e) { btnAddSource.Background = new SolidColorBrush(Color.FromRgb(69, 186, 255)); }*/
 
 		private void btnSource_MouseUp(object sender, MouseButtonEventArgs e)
 		{
@@ -159,10 +160,12 @@ namespace Client
 			lblStatus.Content = "Submitting...";
 
 			string sContent = txtSnippetContent.Text;
-			string sTags = txtTagList.Text + ",source:" + lblSourceName.Content;
+			//string sTags = txtTagList.Text + ",source:" + lblSourceName.Content;
+			string sTags = txtTagList.Text + ",source:" + txtSourceName.Text;
 
 			// add meta tags
-			sContent = "<meta name='sourceTag' content='" + lblSourceName.Content + "'><meta name='source' content='" + txtSourceText.Text + "'>" + sContent;
+			//sContent = "<meta name='sourceTag' content='" + lblSourceName.Content + "'><meta name='source' content='" + txtSourceText.Text + "'>" + sContent;
+			sContent = "<meta name='sourceTag' content='" + txtSourceName.Text + "'><meta name='source' content='" + txtSourceText.Text + "'>" + sContent;
 
 			// make the xml request body
 			string sBody = "<params><param name='sTagList'>" + sTags + "</param><param name='sSnippet'>" + Master.EncodeXML(sContent) + "</param></params>";
