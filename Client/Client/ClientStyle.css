@@ -133,3 +133,12 @@ h1
 	margin-top: -12px;
 	font-size: 12px !important;
 }
+
+.edittext
+{
+	color: #555555;
+	float: right;
+	display: block;
+	margin-top: -12px;
+	font-size: 12px !important;
+}

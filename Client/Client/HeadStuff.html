@@ -57,4 +57,35 @@
 		//sourceDisplay.displaySource(sourceName, sourceText);
 		sourceDisplay.displaySource(sourceName, sourceText);
 	}
+	function SnippetEditOnClick(id)
+	{
+		var divRoot = document.getElementById("snippet" + id);
+		var metas = divRoot.getElementsByTagName("meta");
+
+		var snippetName = "";
+		var sourceName = "";
+		var sourceText = "";
+		var snippetTags = "";
+
+		var snippetContent = divRoot.innerHTML();
+		
+		// go through each meta tag (and remove from div root)
+		for (var i = 0; i < metas.length; i++)
+		{
+			var meta = metas[i];
+
+			var name = meta.getAttribute("name");
+			var content = meta.getAttribute("content");
+
+			if (name == "sourceTag") sourceName = content;
+			if (name == "source") sourceText = content;
+			if (name == "snippetFileName") snippetName = content;
+			if (name == "snippetTags") snippetTags = content;
+
+			// remove this tag from the div root content
+			snippetContent.replace(meta.toString(), "");
+		}
+
+		editDisplay.displayEdit(snippetName, snippetContent, sourceName, sourceText, snippetTags);
+	}
 </script>

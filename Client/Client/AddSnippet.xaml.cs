@@ -26,7 +26,8 @@ namespace Client
 
 		// member variables
 		private string m_sBaseDir = AppDomain.CurrentDomain.BaseDirectory;
-
+		private bool m_bEditing = false;
+		private string m_sEditingSnippet = "";
 	
 		public AddSnippet()
 		{
@@ -36,6 +37,20 @@ namespace Client
 			if (!Master.IsCacheRefreshed()) { this.UpdateTagCache(); }
 			ListTags();
 			
+		}
+
+		public void MakeEditingSnippet(string sSnippetName, string sSnippetContent, string sSnippetSourceName, string sSnippetSourceText, string sSnippetTags)
+		{
+			m_bEditing = true;
+			m_sEditingSnippet = sSnippetName;
+
+			// fill fields
+			txtSnippetContent.Text = sSnippetContent;
+			txtSourceName.Text = sSnippetSourceName;
+			txtSourceText.Text = sSnippetSourceText;
+			txtTagList.Text = sSnippetTags;
+
+			this.Title = "Edit Snippet";
 		}
 
 		private void UpdateTagCache()
@@ -168,13 +183,20 @@ namespace Client
 			sContent = "<meta name='sourceTag' content='" + txtSourceName.Text + "'><meta name='source' content='" + txtSourceText.Text + "'>" + sContent;
 
 			// make the xml request body
-			string sBody = "<params><param name='sTagList'>" + sTags + "</param><param name='sSnippet'>" + Master.EncodeXML(sContent) + "</param></params>";
-			string sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/AddSnippet", sBody, true);
+			string sBody = "<params>";
+			sBody += "<param name='sTagList'>" + sTags + "</param><param name='sSnippet'>" + Master.EncodeXML(sContent) + "</param>";
+			if (m_bEditing) { sBody += "<param name='sFileName'>" + m_sEditingSnippet + "</param>"; }
+			sBody += "</params>";
+
+			string sResponse = "";
+			if (m_bEditing) { sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/EditSnippet", sBody, true); }
+			else { sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/AddSnippet", sBody, true); }
 
 			txtSnippetContent.Text = "";
 
 			if (sResponse != "") { lblStatus.Content = "Error!"; File.WriteAllText(m_sBaseDir + "errordump.txt", sResponse); return; }
 			lblStatus.Content = "Submitted!";
+			if (m_bEditing) { this.Close(); }
 		}
 
 		private void txtSnippetContent_TextChanged(object sender, TextChangedEventArgs e)

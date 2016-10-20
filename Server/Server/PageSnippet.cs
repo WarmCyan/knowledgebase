@@ -72,9 +72,24 @@ namespace KnowledgeBaseServer
 			//sHTML += "' onmouseover='SnippetOnMouseOver(" + this.ID.ToString() + ")' onclick='SnippetOnClick(" + this.ID.ToString() + ")'>";
 			sHTML += "'>";
 			sHTML += "<meta name='snippetFileName' content='" + this.Snippet.FileName + "'>";
+
+			// construct tag list for snippets meta
+			string sTags = "";
+			bool bFirstTag = true;
+			foreach (string sTag in this.Snippet.Tags)
+			{
+				if (sTag.StartsWith("source:")) { continue; }
+				if (!bFirstTag) { sTags += ","; }
+				sTags += sTag;
+
+				if (bFirstTag) { bFirstTag = false; }
+			}
+
+			sHTML += "<meta name='snippetTags' content='" + sTags + "'>";
 			sHTML += this.Snippet.Content;
 			//sHTML += "</div>";
-			sHTML += "<p class='edittext' id='snippetedit" + this.ID.ToString() + "' onclick='SnippetEditOnClick(" + this.ID.ToString() + ")'>edit</p></div>";
+			//sHTML += "<p class='edittext' id='snippetedit" + this.ID.ToString() + "' onclick='SnippetEditOnClick(" + this.ID.ToString() + ")'>edit</p></div>";
+			sHTML += "<p class='edittext' id='snippetedit" + this.ID.ToString() + "' onclick='SnippetEditOnClick(" + this.ID.ToString() + ")'>edit</p>";
 			sHTML += "<p class='sourcetext' id='snippetsource" + this.ID.ToString() + "' onclick='SnippetSourceOnClick(" + this.ID.ToString() + ")'>source</p></div>";
 
 			return sHTML;

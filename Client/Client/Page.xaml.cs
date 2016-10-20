@@ -83,6 +83,7 @@ namespace Client
 			m_pBrowser.Width = this.Width;
 			//m_pBrowser.RegisterJsObject("SourceDisplay", new PageMessageBox());
 			m_pBrowser.RegisterJsObject("sourceDisplay", new SourceDisplayer());
+			m_pBrowser.RegisterJsObject("editDisplay", new EditDisplayer());
 			grdContent.Children.Add(m_pBrowser);
 		}
 	}
@@ -96,6 +97,18 @@ namespace Client
 				//pMsgBox.SetData(sSourceName, sSourceText);
 				//pMsgBox.Show();
 				pMsgBox.InformationalTextBox(sSourceName, sSourceText);
+			});
+		}
+	}
+	public class EditDisplayer
+	{
+		public void DisplayEdit(string sSnippetName, string sSnippetContent, string sSnippetSourceName, string sSnippetSourceText, string sSnippetTags)
+		{
+			Application.Current.Dispatcher.Invoke((Action)delegate
+			{
+				AddSnippet pWindow = new AddSnippet();
+				pWindow.MakeEditingSnippet(sSnippetName, sSnippetContent, sSnippetSourceName, sSnippetSourceText, sSnippetTags);
+				pWindow.Show();
 			});
 		}
 	}
