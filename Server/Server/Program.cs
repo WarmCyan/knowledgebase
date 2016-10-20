@@ -35,16 +35,18 @@ namespace KnowledgeBaseServer
 
 			//string sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/AddSnippet", sBody, true);
 
-			AddTestingSnippets();
+			//AddTestingSnippets();
 
-			string sPage = Query("Test");
+			//string sPage = Query("Test");
 
 			//string sPage = GetTags();
+
+			//EditSnippet("s636125978981349050", "Test,source:NewSource,Depth,Important,OtherThing", "<meta name='sourceTag' content='NewSource'><meta name='source' content='No source for you'><p>Ha! All your evil plans are foiled once more, for I have successfully edited your content!</p>");
 			
 			Console.WriteLine("Finished");
-			Console.WriteLine("\n" + sPage);
+			//Console.WriteLine("\n" + sPage);
 
-			File.WriteAllText("./output.html", sPage);
+			//File.WriteAllText("./output.html", sPage);
 			
 			Console.Read();
 		}
@@ -88,6 +90,12 @@ namespace KnowledgeBaseServer
 			AddSnippet("Depth,Implementation,Genetic_Algorithm,source:Obitko", "<meta name='sourceTag' content='Obitko'><meta name='source' content='http://www.obitko.com/tutorials/genetic-algorithms/ga-basic-description.php'><ol><li>Start - Generate random population of n chromosomes (suitable solutions to problem)</li><li>Fitness - Evaluate the fitness f(x) of each chromosome x in the population</li><li>New population - Create a new population by repeating the following steps until the new population is complete<ol><li>Selection - Select two parent chromosomes from a population according to their fitness (the better fitness, the bigger chance to be selected)</li><li>Crossover - With a crossover probability cross over the parents to form a new offspring (children). If no crossover was performed, offspring is an exact copy of parents.</li><li>Mutation - With a mutation probability mutate new offspring at each locus (position in chromosome)</li><li>Accepting - Place new offspring in a population</li></ol></li><li>Replace - Use new generated population for a further run of algorithm</li><li>Test - If the end condition is satisfied, stop, and return the best soultion in current population.</li><li>Loop - Go to step 2</li></ol>");
 			AddSnippet("Depth,Implementation,Note,Genetic_Algorithm,Initial,source:Franklin", "<meta name='sourceTag' content='Franklin'><meta name='source' content='Franklin 177'><p>Generating initial population: \"First forms an initial population by randomly choosing values (alleles) for each of the features (genes)\"</p>");
 			AddSnippet("Theory,AI,Church-Turing_Thesis,source:Franklin,Church-Turing_Thesis_Theory", "<meta name='sourceTag' content='Franklin'><meta name='source' content='Franklin 79'><p>Church-Turing Thesis - \"Any effective procedure (algorithm) can be implemented via a Turing machine.\"</p>");
+		}
+
+		public static void EditSnippet(string sSnippetName, string sTagList, string sSnippet)
+		{
+			KnowledgeServer ks = new KnowledgeServer();
+			ks.EditSnippet(sSnippetName, sSnippet, sTagList);
 		}
 	}
 }

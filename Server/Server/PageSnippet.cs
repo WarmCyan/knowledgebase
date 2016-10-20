@@ -74,6 +74,7 @@ namespace KnowledgeBaseServer
 			sHTML += "<meta name='snippetFileName' content='" + this.Snippet.FileName + "'>";
 			sHTML += this.Snippet.Content;
 			//sHTML += "</div>";
+			sHTML += "<p class='edittext' id='snippetedit" + this.ID.ToString() + "' onclick='SnippetEditOnClick(" + this.ID.ToString() + ")'>edit</p></div>";
 			sHTML += "<p class='sourcetext' id='snippetsource" + this.ID.ToString() + "' onclick='SnippetSourceOnClick(" + this.ID.ToString() + ")'>source</p></div>";
 
 			return sHTML;

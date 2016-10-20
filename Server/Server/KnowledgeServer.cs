@@ -49,6 +49,46 @@ namespace KnowledgeBaseServer
 
 		// methods
 
+		public void EditSnippet(string sFileName, string sSnippet, string sTagList)
+		{
+			//List<string> lTags = sTagList.Split(',').ToList();
+
+			// get prexisting tag list for this snippet
+			TableOperation pRetrieveInitialOperation = TableOperation.Retrieve<SnippetTableEntity>("SNIPPET", sFileName);
+			TableResult pInitialSnippetResult = this.Table.Execute(pRetrieveInitialOperation);
+			SnippetTableEntity pInitialSnippet = (SnippetTableEntity)pInitialSnippetResult.Result;
+
+			string sPreviousTags = pInitialSnippet.TagList;
+			List<string> lPreviousTags = sPreviousTags.Split(',').ToList();
+
+			//List<TableOperation> lOperations = new List<TableOperation>();
+
+			// 1. delete all tags for snippet that currently exist (query row key) INCLUDING THE SNIPPET PARTITION
+
+			// delete every combination of tag partition key and the filename (rowkey)
+			foreach (string sOldTag in lPreviousTags)
+			{
+				// referencing row entity with a dynamic table entity allows deletion by partition/row key without having to first manually retrieve the correct entity
+				DynamicTableEntity pDynamicEntity = new DynamicTableEntity(sOldTag, sFileName);
+				pDynamicEntity.ETag = "*";
+
+				TableOperation pDeletionOperation = TableOperation.Delete(pDynamicEntity);
+				this.Table.Execute(pDeletionOperation);
+				//lOperations.Add(pDeletionOperation);
+			}
+			
+			// delete the snippet from the SNIPPET partition
+			TableOperation pInitialSnippetDeletion = TableOperation.Delete(pInitialSnippet);
+			this.Table.Execute(pInitialSnippetDeletion);
+
+			// 2. edit the snippets blob content
+			CloudBlockBlob pBlob = this.Container.GetBlockBlobReference(sFileName);
+			pBlob.UploadText(sSnippet);
+
+			// 3. using same process as add snippet, add tags stuff
+			this.AddTagsForSnippet(sFileName, sTagList);
+		}
+
 		// PUBLIC FACING ADD SNIPPET METHOD
 		// NOTE: adding a new source should be done as a SEPARATE API CALL (as well as separate client action if you think about it)
 		//public void AddSnippet(string sSnippet, List<string> lTags)
@@ -62,13 +102,12 @@ namespace KnowledgeBaseServer
 			CloudBlockBlob pBlob = this.Container.GetBlockBlobReference(sFileName);
 			pBlob.UploadText(sSnippet);
 
+			this.AddTagsForSnippet(sFileName, sTagList);
+
 			//TableBatchOperation pBatchOperation = new TableBatchOperation();
-			List<TableOperation> lOperations = new List<TableOperation>();
+			/*List<TableOperation> lOperations = new List<TableOperation>();
 			
 			// add the snippet name to each of the tag sets
-			/*string sTagList = "";
-			foreach (string sTag in lTags) { sTagList += sTag + ","; }
-			sTagList = sTagList.Trim(',');*/
 			foreach (string sTag in lTags)
 			{
 				TagSnippetTableEntity pTagSnippetEntity = new TagSnippetTableEntity(sTag, sFileName);
@@ -95,7 +134,7 @@ namespace KnowledgeBaseServer
 
 			// run the batch operation
 			//m_pTable.ExecuteBatch(pBatchOperation);
-			foreach (TableOperation pOperation in lOperations) { this.Table.Execute(pOperation); }
+			foreach (TableOperation pOperation in lOperations) { this.Table.Execute(pOperation); }*/
 		}
 
 		// PUBIC FACING QUERY METHOD (should return html)
@@ -126,6 +165,37 @@ namespace KnowledgeBaseServer
 		}
 
 		// non public methods
+
+		private void AddTagsForSnippet(string sFileName, string sTagList)
+		{
+			List<string> lTags = sTagList.Split(',').ToList();
+			List<TableOperation> lOperations = new List<TableOperation>();
+			
+			// add the snippet name to each of the tag sets
+			foreach (string sTag in lTags)
+			{
+				TagSnippetTableEntity pTagSnippetEntity = new TagSnippetTableEntity(sTag, sFileName);
+				pTagSnippetEntity.TagList = sTagList;
+				lOperations.Add(TableOperation.Insert(pTagSnippetEntity));
+			}
+
+			// add the raw snippet
+			SnippetTableEntity pSnippetEntity = new SnippetTableEntity(sFileName);
+			pSnippetEntity.TagList = sTagList;
+			lOperations.Add(TableOperation.Insert(pSnippetEntity));
+
+			// try to add the tags (NOTE: This does NOT add source tags)
+			foreach (string sTag in lTags)
+			{
+				TagTableEntity pTagEntity = new TagTableEntity(sTag);
+				pTagEntity.IsSource = false;
+				if (sTag.StartsWith("source:")) { pTagEntity.IsSource = true; }
+				lOperations.Add(TableOperation.InsertOrReplace(pTagEntity));
+			}
+
+			// run all the operations
+			foreach (TableOperation pOperation in lOperations) { this.Table.Execute(pOperation); }
+		}
 
 		private List<TagTableEntity> QueryTagList()
 		{
