@@ -133,6 +133,14 @@ h1
 	margin-top: -12px;
 	font-size: 12px !important;
 }
+.sourcetext:hover
+{
+	color: #888888;
+}
+.sourcetext:active
+{
+	color: #44BBFF;
+}
 
 .edittext
 {
@@ -141,4 +149,12 @@ h1
 	display: block;
 	margin-top: -12px;
 	font-size: 12px !important;
+}
+.edittext:hover
+{
+	color: #888888;
+}
+.edittext:active
+{
+	color: #44BBFF;
 }

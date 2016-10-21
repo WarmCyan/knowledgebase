@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using System.IO;
 using System.Configuration;
 using System.Xml.Linq;
+using System.Text.RegularExpressions;
 using DWL.Utility;
 
 namespace Client
@@ -23,6 +24,7 @@ namespace Client
 	/// </summary>
 	public partial class AddSnippet : Window
 	{
+		private static string s_sMetaPattern = @"<meta name='([a-zA-Z]*)' content='([^\']*)'>";
 
 		// member variables
 		private string m_sBaseDir = AppDomain.CurrentDomain.BaseDirectory;
@@ -44,12 +46,16 @@ namespace Client
 			m_bEditing = true;
 			m_sEditingSnippet = sSnippetName;
 
+			// get the actual snippet content from the server
 			string sSnippetContent = WebCommunications.SendGetRequest("http://dwlapi.azurewebsites.net/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/GetSnippet?sfilename=" + sSnippetName, true);
+			sSnippetContent = Master.CleanResponse(sSnippetContent);
 
-			txtSnippetContent.Text = sSnippetContent;
+			// remove the meta tags (since they are merely added back in on submit)
+			Regex pRegex = new Regex(s_sMetaPattern);
+			sSnippetContent = pRegex.Replace(sSnippetContent, "");
 
 			// fill fields
-			//txtSnippetContent.Text = sSnippetContent;
+			txtSnippetContent.Text = sSnippetContent;
 			txtSourceName.Text = sSnippetSourceName;
 			txtSourceText.Text = sSnippetSourceText;
 			txtTagList.Text = sSnippetTags;
@@ -157,7 +163,6 @@ namespace Client
 				pBorder.Child = pTxtLabel;
 				stkSources.Children.Add(pBorder);
 			}
-	
 		}
 
 		/*private void btnSource_MouseLeave(object sender, MouseEventArgs e) { btnAddSource.Background = new SolidColorBrush(Color.FromRgb(21, 21, 21)); }
@@ -200,7 +205,11 @@ namespace Client
 
 			if (sResponse != "") { lblStatus.Content = "Error!"; File.WriteAllText(m_sBaseDir + "errordump.txt", sResponse); return; }
 			lblStatus.Content = "Submitted!";
-			if (m_bEditing) { this.Close(); }
+			if (m_bEditing) 
+			{
+				Master.GetMainWindow().ShowPage(Master.GetMainWindow().ActiveQuery, true);
+				this.Close(); 
+			}
 		}
 
 		private void txtSnippetContent_TextChanged(object sender, TextChangedEventArgs e)

@@ -33,6 +33,7 @@ namespace Client
 		private Dictionary<string, Page> m_dPageStack;
 		private Dictionary<string, Border> m_dPageStackLabels;
 
+		// construction
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -45,10 +46,17 @@ namespace Client
 			pSettings.SetOffScreenRenderingBestPerformanceArgs();
 			Cef.Initialize(pSettings);
 
+			Master.AssignMainWindow(this);
+
 			//this.ShowPage("Genetic_Algorithm");
 			this.ShowPage("Test");
 		}
 
+		// properties
+		public string ActiveQuery { get { return m_sActiveQuery; } set { m_sActiveQuery = value; } }
+
+		// functions
+		
 		private void Query(string sQuery)
 		{
 			string sFixedQuery = HttpUtility.UrlEncode(sQuery);
@@ -74,9 +82,9 @@ namespace Client
 		}
 
 		private void RemoveActivePage() { if (m_bPageRendered) { cnvsMain.Children.Remove(m_pActivePage); } m_bPageRendered = false; m_sActiveQuery = ""; }
-		private void DisplayActivePage() { cnvsMain.Children.Add(m_pActivePage); m_bPageRendered = true; }
+		private void DisplayActivePage() { if (!m_bPageRendered) { cnvsMain.Children.Add(m_pActivePage); m_bPageRendered = true; } }
 
-		private void ShowPage(string sQuery)
+		public void ShowPage(string sQuery, bool bRefresh = false)
 		{
 			this.RemoveActivePage();
 
@@ -89,10 +97,11 @@ namespace Client
 				if (m_pActivePage.IsBlank()) { m_pActivePage.Refresh(); }
 
 				// if the page didn't load properly, requery it
-				if (m_pActivePage.Empty) 
+				if (m_pActivePage.Empty || bRefresh) 
 				{
 					// remove the bad page and the label for it
 					stkPageStack.Children.Remove(m_dPageStackLabels[sQuery]);
+					m_dPageStackLabels.Remove(sQuery);
 					m_dPageStack.Remove(sQuery);
 					this.Query(sQuery); 
 				}
