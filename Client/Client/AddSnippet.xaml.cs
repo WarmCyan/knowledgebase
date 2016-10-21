@@ -25,6 +25,7 @@ namespace Client
 	public partial class AddSnippet : Window
 	{
 		private static string s_sMetaPattern = @"<meta name='([a-zA-Z]*)' content='([^\']*)'>";
+		private static List<string> s_lGenericTags = new List<string>() { "Wisdom", "Theory", "Note", "Important", "Depth", "Definition", "Argument" };
 
 		// member variables
 		private string m_sBaseDir = AppDomain.CurrentDomain.BaseDirectory;
@@ -92,8 +93,13 @@ namespace Client
 			List<string> lTags = File.ReadAllLines(m_sBaseDir + "_tagcache.dat").ToList();
 			List<string> lSources = File.ReadAllLines(m_sBaseDir + "_sourcecache.dat").ToList();
 
-			// take care of special tags
-			if (lTags.Contains("Definition")) lTags.Remove("Definition");
+			// take care of special tags (put them at top of list)
+			foreach (string sGeneric in s_lGenericTags)
+			{
+				if (lTags.Contains(sGeneric)) lTags.Remove(sGeneric);
+				lTags.Insert(0, sGeneric);
+			}
+			/*if (lTags.Contains("Definition")) lTags.Remove("Definition");
 			if (lTags.Contains("Theory")) lTags.Remove("Theory");
 			if (lTags.Contains("Argument")) lTags.Remove("Argument");
 			if (lTags.Contains("Wisdom")) lTags.Remove("Wisdom");
@@ -106,7 +112,7 @@ namespace Client
 			lTags.Insert(0, "Important");
 			lTags.Insert(0, "Depth");
 			lTags.Insert(0, "Definition");
-			lTags.Insert(0, "Argument");
+			lTags.Insert(0, "Argument");*/
 
 			// tags
 			foreach (string sTag in lTags)
@@ -128,6 +134,7 @@ namespace Client
 				TextBlock pTxtLabel = new TextBlock();
 				pTxtLabel.Text = sTag;
 				pTxtLabel.Foreground = new SolidColorBrush(Colors.White);
+				if (s_lGenericTags.Contains(sTag)) pTxtLabel.Foreground = new SolidColorBrush(Color.FromRgb(69, 186, 255));
 				pTxtLabel.Padding = new Thickness(10);
 				pTxtLabel.HorizontalAlignment = HorizontalAlignment.Stretch;
 
