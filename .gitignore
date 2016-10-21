@@ -4,3 +4,5 @@ Client/Client/obj/*
 Server/packages/*
 Server/Server/bin/*
 Server/Server/obj/*
+App/App/bin/*
+App/App/obj/*
