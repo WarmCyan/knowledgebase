@@ -102,12 +102,12 @@ namespace Client
 	}
 	public class EditDisplayer
 	{
-		public void DisplayEdit(string sSnippetName, string sSnippetContent, string sSnippetSourceName, string sSnippetSourceText, string sSnippetTags)
+		public void DisplayEdit(string sSnippetName, string sSnippetSourceName, string sSnippetSourceText, string sSnippetTags)
 		{
 			Application.Current.Dispatcher.Invoke((Action)delegate
 			{
 				AddSnippet pWindow = new AddSnippet();
-				pWindow.MakeEditingSnippet(sSnippetName, sSnippetContent, sSnippetSourceName, sSnippetSourceText, sSnippetTags);
+				pWindow.MakeEditingSnippet(sSnippetName, sSnippetSourceName, sSnippetSourceText, sSnippetTags);
 				pWindow.Show();
 			});
 		}

@@ -67,7 +67,7 @@
 		var sourceText = "";
 		var snippetTags = "";
 
-		var snippetContent = divRoot.innerHTML();
+		//var snippetContent = divRoot.innerHTML;
 		
 		// go through each meta tag (and remove from div root)
 		for (var i = 0; i < metas.length; i++)
@@ -83,9 +83,9 @@
 			if (name == "snippetTags") snippetTags = content;
 
 			// remove this tag from the div root content
-			snippetContent.replace(meta.toString(), "");
+			//snippetContent.replace(meta.toString(), "");
 		}
 
-		editDisplay.displayEdit(snippetName, snippetContent, sourceName, sourceText, snippetTags);
+		editDisplay.displayEdit(snippetName, sourceName, sourceText, snippetTags);
 	}
 </script>

@@ -39,13 +39,17 @@ namespace Client
 			
 		}
 
-		public void MakeEditingSnippet(string sSnippetName, string sSnippetContent, string sSnippetSourceName, string sSnippetSourceText, string sSnippetTags)
+		public void MakeEditingSnippet(string sSnippetName, string sSnippetSourceName, string sSnippetSourceText, string sSnippetTags)
 		{
 			m_bEditing = true;
 			m_sEditingSnippet = sSnippetName;
 
-			// fill fields
+			string sSnippetContent = WebCommunications.SendGetRequest("http://dwlapi.azurewebsites.net/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/GetSnippet?sfilename=" + sSnippetName, true);
+
 			txtSnippetContent.Text = sSnippetContent;
+
+			// fill fields
+			//txtSnippetContent.Text = sSnippetContent;
 			txtSourceName.Text = sSnippetSourceName;
 			txtSourceText.Text = sSnippetSourceText;
 			txtTagList.Text = sSnippetTags;

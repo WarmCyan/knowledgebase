@@ -49,6 +49,14 @@ namespace KnowledgeBaseServer
 
 		// methods
 
+		// gets ONLY the snippet content
+		public string GetSnippet(string sFileName)
+		{
+			CloudBlockBlob pBlob = this.Container.GetBlockBlobReference(sFileName);
+			string pContents = pBlob.DownloadText();
+			return pContents;
+		}
+
 		public void EditSnippet(string sFileName, string sSnippet, string sTagList)
 		{
 			//List<string> lTags = sTagList.Split(',').ToList();
