@@ -3,6 +3,8 @@ using Android.App;
 using Android.Content;
 using Android.Runtime;
 using Android.Views;
+using Android.Support.V4.App;
+using Android.Support.V4.Widget;
 using Android.Widget;
 using Android.OS;
 
@@ -13,6 +15,10 @@ namespace App
 	{
 		int count = 1;
 
+		private string[] m_aNavTitles;
+		private DrawerLayout m_pDrawerLayout;
+		private ListView m_pDrawerList;
+
 		protected override void OnCreate(Bundle bundle)
 		{
 			base.OnCreate(bundle);
@@ -22,9 +28,16 @@ namespace App
 
 			// Get our button from the layout resource,
 			// and attach an event to it
-			Button button = FindViewById<Button>(Resource.Id.MyButton);
+			//Button button = FindViewById<Button>(Resource.Id.MyButton);
 
-			button.Click += delegate { button.Text = string.Format("{0} clicks!", count++); };
+			//button.Click += delegate { button.Text = string.Format("{0} clicks!", count++); };
+
+			string[] m_aNavTitles = new string[] { "thing1", "thing2" };
+
+			m_pDrawerLayout = FindViewById<DrawerLayout>(Resource.Id.appDrawerLayout);
+			m_pDrawerList = FindViewById<ListView>(Resource.Id.appDrawerList);
+
+			m_pDrawerList.Adapter = new DrawerItemCustomAdapter(this, Resource.Layout.ListViewItemRow, m_aNavTitles);
 		}
 	}
 }
