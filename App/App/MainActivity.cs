@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 using Android.App;
 using Android.Content;
 using Android.Runtime;
@@ -7,13 +8,17 @@ using Android.Support.V4.App;
 using Android.Support.V4.Widget;
 using Android.Widget;
 using Android.OS;
+using Android.Webkit;
+using DWL.Utility;
 
 namespace App
 {
-	[Activity(Label = "App", MainLauncher = true, Icon = "@drawable/icon")]
+	[Activity(Label = "App", MainLauncher = true, Icon = "@drawable/icon", Theme = "@android:style/Theme.NoTitleBar")]
 	public class MainActivity : Activity
 	{
 		int count = 1;
+
+		WebView m_pWebView;
 
 		private string[] m_aNavTitles;
 		private DrawerLayout m_pDrawerLayout;
@@ -21,6 +26,9 @@ namespace App
 
 		protected override void OnCreate(Bundle bundle)
 		{
+
+			WebCommunications.AuthKey = "54003c32a190b6063fe06a528bc230ce151b589512db4a39ecf8ac01be393dafa154f39bde1f56e690f4c3c2870323972240d4d02fc4fa2f3349dc7ef4c7dc09";
+		
 			base.OnCreate(bundle);
 
 			// Set our view from the "main" layout resource
@@ -38,6 +46,20 @@ namespace App
 			m_pDrawerList = FindViewById<ListView>(Resource.Id.appDrawerList);
 
 			m_pDrawerList.Adapter = new DrawerItemCustomAdapter(this, Resource.Layout.ListViewItemRow, m_aNavTitles);
+
+			m_pWebView = FindViewById<WebView>(Resource.Id.webview);
+			m_pWebView.SetWebViewClient(new CustomWebViewClient());
+			m_pWebView.Settings.JavaScriptEnabled = true;
+			//m_pWebView.LoadUrl("http://www.google.com");
+			//m_pWebView.Load
+			Query("Genetic_Algorithm");
+		}
+
+		private void Query(string sQuery)
+		{
+			string sFixedQuery = HttpUtility.UrlEncode(sQuery);
+			string sResponse = WebCommunications.SendGetRequest("http://dwlapi.azurewebsites.net/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/ConstructPage?squery=" + sFixedQuery, true);
+			m_pWebView.LoadData(sResponse, "text/html", "UTF-8");
 		}
 	}
 }
