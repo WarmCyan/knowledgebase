@@ -37,19 +37,19 @@ namespace KnowledgeBaseServer
 
 			//AddTestingSnippets();
 
-			//string sPage = Query("Test");
+			string sPage = Query("Genetic_Algorithm");
 
 			//string sPage = GetTags();
 
 			//EditSnippet("s636125978981349050", "Test,source:NewSource,Depth,Important,OtherThing", "<meta name='sourceTag' content='NewSource'><meta name='source' content='No source for you'><p>Ha! All your evil plans are foiled once more, for I have successfully edited your content!</p>");
 
-			string sPage = GetSnippet("s636125978981349050");
+			//string sPage = GetSnippet("s636125978981349050");
 
 
 			Console.WriteLine("Finished");
 			Console.WriteLine("\n" + sPage);
 
-			//File.WriteAllText("./output.html", sPage);
+			File.WriteAllText("./output.html", sPage);
 			
 			Console.Read();
 		}

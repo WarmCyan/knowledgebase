@@ -1,0 +1,154 @@
+body
+{
+	font-family: Arial;
+	background-color: #222222;
+	color: #BBBBBB;
+	margin: 0px;
+	padding: 0px;
+}
+
+p, li, ol, ul
+{
+	padding: 2px;
+	margin: 2px;
+	font-size: 15px;
+	line-height: 1.3;
+}
+
+li
+{
+	margin: 2%;
+}
+
+ol, ul
+{
+	margin-left: 10%;
+}
+
+
+h1
+{
+	margin: 5px;
+	padding: 5px;
+}
+
+.MathJax_Display, .MathJax, .MathJax_Preview, MathJax_CHTML, MathJax_CHTML_Display, mjx-math
+{
+	color: #FFFFFF; 
+}
+
+.primary
+{
+	border-left: 4px solid #44BBFF;
+	color: #44BBFF;
+}
+.primary p
+{
+	line-height: 1.5;
+	font-size: 20px;
+}
+
+.secondary
+{
+	border-left: 4px solid #22FFAA;
+	color: #22FFAA;
+}
+.secondary p
+{
+	line-height: 1.5;
+	font-size: 19px;
+}
+
+.tertiary
+{
+	border-left: 4px solid #FFAA77;
+	color: #FFAA77;
+}
+.tertiary p
+{
+	line-height: 1.4;
+	font-size: 18px;
+}
+
+.quaternary
+{
+	border-left: 4px solid #CC93C4;
+	color: #CC93C4;
+}
+.quaternary p
+{
+	line-height: 1.4;
+	font-size: 16px;
+}
+
+.snippet
+{
+	margin-top: 4%;
+	margin-bottom: 4%;
+	background-color: #333333;
+	padding: 4%;
+	padding-right: 2%;
+	padding-bottom: 10%;
+}
+
+.separator
+{
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 95%;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	border: 1px solid #888888;
+}
+
+.title
+{
+	color: #EEEEEE;
+}
+.title h1
+{
+	/*margin-right: auto;
+	margin-left: auto;*/
+	text-align: center;
+}
+
+.templatepart
+{
+	color: #666666;
+	text-align: center;
+	/*margin-left: 15%;*/
+	margin-top: 5%;
+	margin-bottom: 5%;
+}
+
+.sourcetext
+{
+	color: #555555;
+	float: left;
+	display: block;
+	width: 30%;
+	background-color: #383838;
+	font-size: 12pt !important;
+	text-align: center;
+}
+.sourcetext:active
+{
+	background-color: #44BBFF;
+}
+
+.edittext
+{
+	color: #555555;
+	float: right;
+	display: block;
+	margin-right: 2%;
+	width: 30%;
+	background-color: #383838;
+	font-size: 12pt !important;
+	text-align: center;
+}
+.edittext:active
+{
+	background-color: #44BBFF;
+}
