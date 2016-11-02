@@ -33,11 +33,12 @@ namespace App
 		protected override void OnCreate(Bundle bundle)
 		{
 			base.OnCreate(bundle);
-			
+
 			WebCommunications.AuthKey = "54003c32a190b6063fe06a528bc230ce151b589512db4a39ecf8ac01be393dafa154f39bde1f56e690f4c3c2870323972240d4d02fc4fa2f3349dc7ef4c7dc09";
 
 			// load important stuff
 			this.LoadCSS();
+			this.LoadHeaderHtml();
 
 			// Set our view from the "main" layout resource
 			SetContentView(Resource.Layout.Main);
@@ -58,9 +59,18 @@ namespace App
 			m_pWebView = FindViewById<WebView>(Resource.Id.webview);
 			m_pWebView.SetWebViewClient(new CustomWebViewClient());
 			m_pWebView.Settings.JavaScriptEnabled = true;
+			m_pWebView.Settings.AllowFileAccessFromFileURLs = true;
+			m_pWebView.Settings.AllowUniversalAccessFromFileURLs = true;
+			m_pWebView.Settings.DomStorageEnabled = true;
+
+			//m_pWebView.SetWebChromeClient
+			//WebView.SetWebContentsDebuggingEnabled(true); // doesn't seem to do anything?? How do you debug it?
+
+			
 			//m_pWebView.LoadUrl("http://www.google.com");
 			//m_pWebView.Load
-			Query("Genetic_Algorithm");
+			//Query("Genetic_Algorithm");
+			Query("Test");
 		}
 
 		private void Query(string sQuery)
@@ -71,14 +81,14 @@ namespace App
 			// fix response and add to it
 			sResponse = Master.CleanResponse(sResponse);
 
-			string sHTML = "<html><head><style>" + m_sCSS + "</style></head>" + sResponse;
-			
+			//string sHTML = "<html><head>" + m_sHead + "<style>" +/* m_sCSS + */"</style></head>" + sResponse;
+			string sHTML = "<html><head>" + m_sHead + "<style>" +/* m_sCSS + */"</style></head><body><h1>Hello world $\\(\\alpha = \\beta\\)$</h1></body></html>";
+
 			m_pWebView.LoadData(sHTML, "text/html", "UTF-8");
 		}
 
 		private void LoadCSS()
 		{
-
 			AssetManager pManager = this.Assets;
 		
 			var pStream = pManager.Open("Style.css");
@@ -88,7 +98,11 @@ namespace App
 
 		private void LoadHeaderHtml()
 		{
+			AssetManager pManager = this.Assets;
 		
+			var pStream = pManager.Open("Head.html");
+			StreamReader pStreamReader = new StreamReader(pStream);
+			m_sHead = pStreamReader.ReadToEnd();
 		}
 	}
 }

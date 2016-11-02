@@ -20,5 +20,14 @@ namespace App
 			view.LoadUrl(url);
 			return true;
 		}
+		/*public override void OnReceivedError(WebView view, [GeneratedEnum] ClientError errorCode, string description, string failingUrl)
+		{
+			base.OnReceivedError(view, errorCode, description, failingUrl);
+		}*/
+		public override void OnReceivedError(WebView view, IWebResourceRequest request, WebResourceError error)
+		{
+			Console.WriteLine("Error! " + error.Description);
+			base.OnReceivedError(view, request, error);
+		}
 	}
 }
