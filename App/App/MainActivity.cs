@@ -57,11 +57,13 @@ namespace App
 			m_pDrawerList.Adapter = new DrawerItemCustomAdapter(this, Resource.Layout.ListViewItemRow, m_aNavTitles);
 
 			m_pWebView = FindViewById<WebView>(Resource.Id.webview);
-			m_pWebView.SetWebViewClient(new CustomWebViewClient());
+			//m_pWebView.SetWebViewClient(new CustomWebViewClient());
+			m_pWebView.SetWebChromeClient(new WebChromeClient());
 			m_pWebView.Settings.JavaScriptEnabled = true;
 			m_pWebView.Settings.AllowFileAccessFromFileURLs = true;
 			m_pWebView.Settings.AllowUniversalAccessFromFileURLs = true;
 			m_pWebView.Settings.DomStorageEnabled = true;
+			m_pWebView.Settings.SetPluginState(WebSettings.PluginState.On);
 
 			//m_pWebView.SetWebChromeClient
 			//WebView.SetWebContentsDebuggingEnabled(true); // doesn't seem to do anything?? How do you debug it?
@@ -69,8 +71,8 @@ namespace App
 			
 			//m_pWebView.LoadUrl("http://www.google.com");
 			//m_pWebView.Load
-			//Query("Genetic_Algorithm");
-			Query("Test");
+			Query("Genetic_Algorithm");
+			//Query("Test");
 		}
 
 		private void Query(string sQuery)
@@ -81,8 +83,10 @@ namespace App
 			// fix response and add to it
 			sResponse = Master.CleanResponse(sResponse);
 
-			//string sHTML = "<html><head>" + m_sHead + "<style>" +/* m_sCSS + */"</style></head>" + sResponse;
-			string sHTML = "<html><head>" + m_sHead + "<style>" +/* m_sCSS + */"</style></head><body><h1>Hello world $\\(\\alpha = \\beta\\)$</h1></body></html>";
+			string sHTML = "<html><head>" + m_sHead + "<style>" + m_sCSS + "</style></head>" + sResponse;
+			//string sHTML = "<html><head>" + m_sHead + "<style>" +/* m_sCSS + */"</style></head><body><h1>Hello world $\\(\\alpha = \\beta\\)$</h1></body></html>";
+			//string sHTML = "<html><head>" + m_sHead + "<style>" +/* m_sCSS + */"</style></head><body><h1>Hello world $\\alpha = \\beta$</h1></body></html>";
+			//string sHTML = "<html><head>" + m_sHead + "<style>" +/* m_sCSS + */"</style></head><body><h1>Hello world \\(\\alpha = \\beta\\)</h1></body></html>";
 
 			m_pWebView.LoadData(sHTML, "text/html", "UTF-8");
 		}

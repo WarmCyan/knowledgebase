@@ -1,11 +1,31 @@
-<script type="text/x-mathjax-config">
-	MathJax.Hub.Config({
-		jax: ["input/TeX", "output/HTML-CSS"]//,
-		//jax: ["input/TeX", "output/SVG"],
-		/*tex2jax: {
-			inlineMath: [["$", "$"], ["\\(", "\\)"]],
+<!--<script type="text/x-mathjax-config">
+	MathJax.Hub.Config({text2jax:{inlineMath:[["$","$"],["\\(","\\)"]],processEscapes: true}});
+</script>-->
+<script type="text/javascript">
+	window.MathJax = {
+		tex2jax: {
+			inlineMath: [["$", "$"],["\\(", "\\)"]], 
 			processEscapes: true
+		},
+		SVG:{
+			scale: 120
+		},
+		styles: {
+			".MathJax_Preview": {
+				color: "white"
+			},
+			".MathJax_Display":{
+				color: "white"
+			},
+			".MathJax": {
+				color: "white"
+			},
+			".MathJax_SVG svg > g, .MathJax_SVG_Display svg > g": {
+				fill: "#FFFFFF",
+				stroke: "#FFFFFF"
+			}
 		}
-	*/});
+	};
 </script>
 <script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_SVG' async></script>
+
