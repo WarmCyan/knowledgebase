@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 //using System.IO;
 using System.Web;
 using Android.App;
@@ -19,11 +20,12 @@ namespace App
 	[Activity(Label = "App", MainLauncher = true, Icon = "@drawable/icon", Theme = "@android:style/Theme.NoTitleBar")]
 	public class MainActivity : Activity
 	{
-		int count = 1;
+		private int count = 1;
 
-		WebView m_pWebView;
+		private WebView m_pWebView;
 
-		private string[] m_aNavTitles;
+		//private string[] m_aNavTitles;
+		private List<string> m_lNavTitles;
 		private DrawerLayout m_pDrawerLayout;
 		private ListView m_pDrawerList;
 
@@ -49,14 +51,26 @@ namespace App
 
 			//button.Click += delegate { button.Text = string.Format("{0} clicks!", count++); };
 
-			string[] m_aNavTitles = new string[] { "thing1", "thing2" };
+			//string[] m_aNavTitles = new string[] { "thing1", "thing2" };
+			m_lNavTitles = new List<string>() { "Query", "New Snippet" };
 
 			m_pDrawerLayout = FindViewById<DrawerLayout>(Resource.Id.appDrawerLayout);
 			m_pDrawerList = FindViewById<ListView>(Resource.Id.appDrawerList);
 
-			m_pDrawerList.Adapter = new DrawerItemCustomAdapter(this, Resource.Layout.ListViewItemRow, m_aNavTitles);
+			m_pDrawerList.Adapter = new DrawerItemCustomAdapter(this, Resource.Layout.ListViewItemRow, m_lNavTitles.ToArray());
 
-			m_pWebView = FindViewById<WebView>(Resource.Id.webview);
+			m_pDrawerList.ItemClick += (object sender, Android.Widget.AdapterView.ItemClickEventArgs e) =>
+			{
+				int iChoice = e.Position;
+				string sChoice = m_lNavTitles[iChoice];
+				if (sChoice == "Query")
+				{
+					Console.WriteLine("Yes, I will query now");
+				}
+			};
+
+
+				m_pWebView = FindViewById<WebView>(Resource.Id.webview);
 			//m_pWebView.SetWebViewClient(new CustomWebViewClient());
 			m_pWebView.SetWebChromeClient(new WebChromeClient());
 			m_pWebView.Settings.JavaScriptEnabled = true;
@@ -65,14 +79,15 @@ namespace App
 			m_pWebView.Settings.DomStorageEnabled = true;
 			m_pWebView.Settings.SetPluginState(WebSettings.PluginState.On);
 
+
 			//m_pWebView.SetWebChromeClient
 			//WebView.SetWebContentsDebuggingEnabled(true); // doesn't seem to do anything?? How do you debug it?
 
-			
 			//m_pWebView.LoadUrl("http://www.google.com");
 			//m_pWebView.Load
-			Query("Genetic_Algorithm");
-			//Query("Test");
+			//Query("Genetic_Algorithm");
+			Query("Test");
+			Console.WriteLine("Hello world!");
 		}
 
 		private void Query(string sQuery)
@@ -84,9 +99,6 @@ namespace App
 			sResponse = Master.CleanResponse(sResponse);
 
 			string sHTML = "<html><head>" + m_sHead + "<style>" + m_sCSS + "</style></head>" + sResponse;
-			//string sHTML = "<html><head>" + m_sHead + "<style>" +/* m_sCSS + */"</style></head><body><h1>Hello world $\\(\\alpha = \\beta\\)$</h1></body></html>";
-			//string sHTML = "<html><head>" + m_sHead + "<style>" +/* m_sCSS + */"</style></head><body><h1>Hello world $\\alpha = \\beta$</h1></body></html>";
-			//string sHTML = "<html><head>" + m_sHead + "<style>" +/* m_sCSS + */"</style></head><body><h1>Hello world \\(\\alpha = \\beta\\)</h1></body></html>";
 
 			m_pWebView.LoadData(sHTML, "text/html", "UTF-8");
 		}
