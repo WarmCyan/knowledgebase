@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Collections.Generic;
-//using System.IO;
+using System.IO;
 using System.Web;
 using Android.App;
 using Android.Content.Res;
@@ -13,11 +14,10 @@ using Android.Widget;
 using Android.OS;
 using Android.Webkit;
 using DWL.Utility;
-using System.IO;
 
 namespace App
 {
-	[Activity(Label = "App", MainLauncher = true, Icon = "@drawable/icon", Theme = "@android:style/Theme.NoTitleBar")]
+	[Activity(Label = "App", MainLauncher = true, Icon = "@drawable/icon", Theme = "@android:style/Theme.NoTitleBar", ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
 	public class MainActivity : Activity
 	{
 		private int count = 1;
@@ -71,11 +71,13 @@ namespace App
 				int iChoice = e.Position;
 				string sChoice = m_lNavTitles[iChoice];
 				if (sChoice == "Query") { this.ShowInputDialog(); }
-				else if (sChoice == "Close Current") { this.ClosePage(); }
-				else
+				else if (sChoice == "New Snippet") 
 				{
-					this.Query(sChoice);
+					Intent pIntent = new Intent(this, (new PageActivity()).Class);
+					StartActivity(pIntent);
 				}
+				else if (sChoice == "Close Current") { this.ClosePage(); }
+				else { this.Query(sChoice); }
 
 				m_pDrawerLayout.CloseDrawer(m_pDrawerList);
 			};
@@ -118,6 +120,7 @@ namespace App
 				string sFixedQuery = HttpUtility.UrlEncode(sQuery);
 				string sResponse = WebCommunications.SendGetRequest("http://dwlapi.azurewebsites.net/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/ConstructPage?squery=" + sFixedQuery, true);
 
+
 				// fix response and add to it
 				sResponse = Master.CleanResponse(sResponse);
 
@@ -147,7 +150,6 @@ namespace App
 			m_pWebView.StopLoading();
 			m_pWebView.LoadData("", "text/html", "UTF-8");
 			m_pWebView.Reload();
-			
 			m_sCurrentPage = "";
 			this.RefreshDrawer();
 		}
@@ -172,20 +174,21 @@ namespace App
 
 		protected void ShowInputDialog()
 		{
-
-			// get prompts.xml view
 			LayoutInflater pLayoutInflater = LayoutInflater.From(this);
 			View pPromptView = pLayoutInflater.Inflate(Resource.Layout.InputDialog, null);
 			AlertDialog.Builder pAlertBuilder = new AlertDialog.Builder(this);
 			pAlertBuilder.SetView(pPromptView);
 
 			EditText pEditText = (EditText)pPromptView.FindViewById(Resource.Id.txtQuery);
+			ProgressBar pProgressBar = (ProgressBar)pPromptView.FindViewById(Resource.Id.indicator);
+			pProgressBar.Visibility = ViewStates.Invisible;
 
 			// setup a dialog window
 			//pAlertBuilder.SetCancelable(true).SetPositiveButton("OK", delegate
-			pAlertBuilder.SetPositiveButton("OK", delegate
+			pAlertBuilder.SetPositiveButton("Query", delegate
 			{
 				Console.WriteLine("Querying: " + pEditText.Text);
+				pProgressBar.Visibility = ViewStates.Visible;
 				Query(pEditText.Text);
 			});
 
