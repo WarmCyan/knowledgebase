@@ -22,7 +22,11 @@ namespace App
 	{
 		private int count = 1;
 
+		private bool m_bBrowserInitialized;
 		private WebView m_pWebView;
+
+		private Dictionary<string, string> m_dLoadedPages;
+		private string m_sCurrentPage;
 
 		//private string[] m_aNavTitles;
 		private List<string> m_lNavTitles;
@@ -38,6 +42,9 @@ namespace App
 
 			WebCommunications.AuthKey = "54003c32a190b6063fe06a528bc230ce151b589512db4a39ecf8ac01be393dafa154f39bde1f56e690f4c3c2870323972240d4d02fc4fa2f3349dc7ef4c7dc09";
 
+			m_bBrowserInitialized = false;
+			m_dLoadedPages = new Dictionary<string, string>();
+
 			// load important stuff
 			this.LoadCSS();
 			this.LoadHeaderHtml();
@@ -52,33 +59,28 @@ namespace App
 			//button.Click += delegate { button.Text = string.Format("{0} clicks!", count++); };
 
 			//string[] m_aNavTitles = new string[] { "thing1", "thing2" };
-			m_lNavTitles = new List<string>() { "Query", "New Snippet" };
+			m_lNavTitles = new List<string>() { "Query", "New Snippet", "Close Current" };
 
 			m_pDrawerLayout = FindViewById<DrawerLayout>(Resource.Id.appDrawerLayout);
 			m_pDrawerList = FindViewById<ListView>(Resource.Id.appDrawerList);
 
-			m_pDrawerList.Adapter = new DrawerItemCustomAdapter(this, Resource.Layout.ListViewItemRow, m_lNavTitles.ToArray());
+			this.RefreshDrawer();
 
 			m_pDrawerList.ItemClick += (object sender, Android.Widget.AdapterView.ItemClickEventArgs e) =>
 			{
 				int iChoice = e.Position;
 				string sChoice = m_lNavTitles[iChoice];
-				if (sChoice == "Query")
+				if (sChoice == "Query") { this.ShowInputDialog(); }
+				else if (sChoice == "Close Current") { this.ClosePage(); }
+				else
 				{
-					Console.WriteLine("Yes, I will query now");
+					this.Query(sChoice);
 				}
+
+				m_pDrawerLayout.CloseDrawer(m_pDrawerList);
 			};
 
-
-				m_pWebView = FindViewById<WebView>(Resource.Id.webview);
 			//m_pWebView.SetWebViewClient(new CustomWebViewClient());
-			m_pWebView.SetWebChromeClient(new WebChromeClient());
-			m_pWebView.Settings.JavaScriptEnabled = true;
-			m_pWebView.Settings.AllowFileAccessFromFileURLs = true;
-			m_pWebView.Settings.AllowUniversalAccessFromFileURLs = true;
-			m_pWebView.Settings.DomStorageEnabled = true;
-			m_pWebView.Settings.SetPluginState(WebSettings.PluginState.On);
-
 
 			//m_pWebView.SetWebChromeClient
 			//WebView.SetWebContentsDebuggingEnabled(true); // doesn't seem to do anything?? How do you debug it?
@@ -86,21 +88,68 @@ namespace App
 			//m_pWebView.LoadUrl("http://www.google.com");
 			//m_pWebView.Load
 			//Query("Genetic_Algorithm");
-			Query("Test");
+			//Query("Test");
 			Console.WriteLine("Hello world!");
+		}
+
+		private void InitBrowser()
+		{
+			if (!m_bBrowserInitialized)
+			{
+				m_pWebView = FindViewById<WebView>(Resource.Id.webview);
+				m_pWebView.SetWebChromeClient(new WebChromeClient());
+				m_pWebView.Settings.JavaScriptEnabled = true;
+				m_pWebView.Settings.AllowFileAccessFromFileURLs = true;
+				m_pWebView.Settings.AllowUniversalAccessFromFileURLs = true;
+				m_pWebView.Settings.DomStorageEnabled = true;
+				m_pWebView.Settings.SetPluginState(WebSettings.PluginState.On);
+				m_pWebView.SetLayerType(LayerType.Hardware, null); // make it go faster?
+				m_bBrowserInitialized = true;
+			}
 		}
 
 		private void Query(string sQuery)
 		{
-			string sFixedQuery = HttpUtility.UrlEncode(sQuery);
-			string sResponse = WebCommunications.SendGetRequest("http://dwlapi.azurewebsites.net/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/ConstructPage?squery=" + sFixedQuery, true);
+			this.InitBrowser();
 
-			// fix response and add to it
-			sResponse = Master.CleanResponse(sResponse);
+			string sHTML = "";
+			if (!m_dLoadedPages.ContainsKey(sQuery))
+			{
+				string sFixedQuery = HttpUtility.UrlEncode(sQuery);
+				string sResponse = WebCommunications.SendGetRequest("http://dwlapi.azurewebsites.net/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/ConstructPage?squery=" + sFixedQuery, true);
 
-			string sHTML = "<html><head>" + m_sHead + "<style>" + m_sCSS + "</style></head>" + sResponse;
+				// fix response and add to it
+				sResponse = Master.CleanResponse(sResponse);
 
+				sHTML = "<html><head>" + m_sHead + "<style>" + m_sCSS + "</style></head>" + sResponse;
+
+				m_dLoadedPages.Add(sQuery, sHTML);
+				m_lNavTitles.Add(sQuery);
+				this.RefreshDrawer();
+			}
+			else { sHTML = m_dLoadedPages[sQuery]; }
+			m_sCurrentPage = sQuery;
+
+			m_pWebView.StopLoading();
 			m_pWebView.LoadData(sHTML, "text/html", "UTF-8");
+			m_pWebView.Reload();
+		}
+
+		private void RefreshDrawer() { m_pDrawerList.Adapter = new DrawerItemCustomAdapter(this, Resource.Layout.ListViewItemRow, m_lNavTitles.ToArray()); }
+		
+		private void ClosePage()
+		{
+			if (m_sCurrentPage == "" || m_sCurrentPage == null) return;
+			
+			m_dLoadedPages.Remove(m_sCurrentPage);
+			m_lNavTitles.Remove(m_sCurrentPage);
+
+			m_pWebView.StopLoading();
+			m_pWebView.LoadData("", "text/html", "UTF-8");
+			m_pWebView.Reload();
+			
+			m_sCurrentPage = "";
+			this.RefreshDrawer();
 		}
 
 		private void LoadCSS()
@@ -119,6 +168,30 @@ namespace App
 			var pStream = pManager.Open("Head.html");
 			StreamReader pStreamReader = new StreamReader(pStream);
 			m_sHead = pStreamReader.ReadToEnd();
+		}
+
+		protected void ShowInputDialog()
+		{
+
+			// get prompts.xml view
+			LayoutInflater pLayoutInflater = LayoutInflater.From(this);
+			View pPromptView = pLayoutInflater.Inflate(Resource.Layout.InputDialog, null);
+			AlertDialog.Builder pAlertBuilder = new AlertDialog.Builder(this);
+			pAlertBuilder.SetView(pPromptView);
+
+			EditText pEditText = (EditText)pPromptView.FindViewById(Resource.Id.txtQuery);
+
+			// setup a dialog window
+			//pAlertBuilder.SetCancelable(true).SetPositiveButton("OK", delegate
+			pAlertBuilder.SetPositiveButton("OK", delegate
+			{
+				Console.WriteLine("Querying: " + pEditText.Text);
+				Query(pEditText.Text);
+			});
+
+			// create an alert dialog
+			AlertDialog alert = pAlertBuilder.Create();
+			alert.Show();
 		}
 	}
 }
