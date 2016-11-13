@@ -17,7 +17,7 @@ using DWL.Utility;
 
 namespace App
 {
-	[Activity(Label = "App", MainLauncher = true, Icon = "@drawable/icon", Theme = "@android:style/Theme.NoTitleBar", ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
+	[Activity(Label = "Knowledgebase", MainLauncher = true, Icon = "@drawable/icon", Theme = "@android:style/Theme.NoTitleBar", ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
 	public class MainActivity : Activity
 	{
 		private int m_iCount = 1;
@@ -56,11 +56,6 @@ namespace App
 
 			// Get our button from the layout resource,
 			// and attach an event to it
-			//Button button = FindViewById<Button>(Resource.Id.MyButton);
-
-			//button.Click += delegate { button.Text = string.Format("{0} clicks!", count++); };
-
-			//string[] m_aNavTitles = new string[] { "thing1", "thing2" };
 			m_lNavTitles = new List<string>() { "Query", "New Snippet", "Close Current" };
 
 			m_pDrawerLayout = FindViewById<DrawerLayout>(Resource.Id.appDrawerLayout);
@@ -74,16 +69,9 @@ namespace App
 				string sChoice = m_lNavTitles[iChoice];
 				if (sChoice == "Query") 
 				{
-					//this.ShowInputDialog(); 
 					Intent pIntent = new Intent(this, (new QueryActivity()).Class);
 					pIntent.PutExtra("num", m_iCount);
 					StartActivityForResult(pIntent, 0);
-
-					/*if (Master.GetQueryNumber() == m_iCount)
-					{
-						m_iCount++;
-						this.Query(Master.GetQuery());
-					}*/
 				}
 				else if (sChoice == "New Snippet") 
 				{
@@ -96,17 +84,6 @@ namespace App
 
 				m_pDrawerLayout.CloseDrawer(m_pDrawerList);
 			};
-
-			//m_pWebView.SetWebViewClient(new CustomWebViewClient());
-
-			//m_pWebView.SetWebChromeClient
-			//WebView.SetWebContentsDebuggingEnabled(true); // doesn't seem to do anything?? How do you debug it?
-
-			//m_pWebView.LoadUrl("http://www.google.com");
-			//m_pWebView.Load
-			//Query("Genetic_Algorithm");
-			//Query("Test");
-			Console.WriteLine("Hello world!");
 
 			global::Xamarin.Forms.Forms.Init(this, bundle);
 		}
@@ -147,7 +124,6 @@ namespace App
 			{
 				string sFixedQuery = HttpUtility.UrlEncode(sQuery);
 				string sResponse = WebCommunications.SendGetRequest("http://dwlapi.azurewebsites.net/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/ConstructPage?squery=" + sFixedQuery, true);
-
 
 				// fix response and add to it
 				sResponse = Master.CleanResponse(sResponse);
@@ -207,31 +183,6 @@ namespace App
 			var pStream = pManager.Open("Head.html");
 			StreamReader pStreamReader = new StreamReader(pStream);
 			m_sHead = pStreamReader.ReadToEnd();
-		}
-
-		protected void ShowInputDialog()
-		{
-			LayoutInflater pLayoutInflater = LayoutInflater.From(this);
-			View pPromptView = pLayoutInflater.Inflate(Resource.Layout.InputDialog, null);
-			AlertDialog.Builder pAlertBuilder = new AlertDialog.Builder(this);
-			pAlertBuilder.SetView(pPromptView);
-
-			EditText pEditText = (EditText)pPromptView.FindViewById(Resource.Id.txtQuery);
-			ProgressBar pProgressBar = (ProgressBar)pPromptView.FindViewById(Resource.Id.indicator);
-			pProgressBar.Visibility = ViewStates.Invisible;
-
-			// setup a dialog window
-			//pAlertBuilder.SetCancelable(true).SetPositiveButton("OK", delegate
-			pAlertBuilder.SetPositiveButton("Query", delegate
-			{
-				Console.WriteLine("Querying: " + pEditText.Text);
-				pProgressBar.Visibility = ViewStates.Visible;
-				Query(pEditText.Text);
-			});
-
-			// create an alert dialog
-			AlertDialog alert = pAlertBuilder.Create();
-			alert.Show();
 		}
 
 		protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
