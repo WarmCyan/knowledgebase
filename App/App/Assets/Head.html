@@ -1,6 +1,3 @@
-<!--<script type="text/x-mathjax-config">
-	MathJax.Hub.Config({text2jax:{inlineMath:[["$","$"],["\\(","\\)"]],processEscapes: true}});
-</script>-->
 <script type="text/javascript">
 	window.MathJax = {
 		tex2jax: {
@@ -31,8 +28,6 @@
 <script type="text/javascript">
 	function SnippetSourceOnClick(id)
 	{
-		//alert(id);
-		// get the meta for the source and the tag
 		var divRoot = document.getElementById("snippet" + id);
 
 		var metas = divRoot.getElementsByTagName("meta");
@@ -40,7 +35,6 @@
 		var sourceName = "";
 		var sourceText = "";
 
-		// go through each meta tag
 		for (var i = 0; i < metas.length; i++)
 		{
 			var meta = metas[i];
@@ -52,7 +46,6 @@
 			if (name == "source") sourceText = content;
 		}
 
-		//sourceDisplay.displaySource(sourceName, sourceText);
 		CSharp.DisplaySource(sourceName, sourceText);
 	}
 	function SnippetEditOnClick(id)
@@ -65,9 +58,6 @@
 		var sourceText = "";
 		var snippetTags = "";
 
-		//var snippetContent = divRoot.innerHTML;
-
-		// go through each meta tag (and remove from div root)
 		for (var i = 0; i < metas.length; i++)
 		{
 			var meta = metas[i];
@@ -80,8 +70,6 @@
 			if (name == "snippetFileName") snippetName = content;
 			if (name == "snippetTags") snippetTags = content;
 
-			// remove this tag from the div root content
-			//snippetContent.replace(meta.toString(), "");
 		}
 
 		CSharp.DisplayEdit(snippetName, sourceName, sourceText, snippetTags);

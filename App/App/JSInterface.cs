@@ -31,6 +31,10 @@ namespace App
 		public void DisplaySource(string sSourceName, string sSourceText)
 		{
 			// show source stuff here, in a message box
+			Intent pIntent = new Intent(m_pContext, (new SimpleTextActivity()).Class);
+			pIntent.PutExtra("Title", sSourceName);
+			pIntent.PutExtra("Content", sSourceText);
+			m_pContext.StartActivity(pIntent);
 		}
 
 		[Export]
@@ -38,7 +42,7 @@ namespace App
 		public void DisplayEdit(string sSnippetName, string sSnippetSourceName, string sSnippetSourceText, string sSnippetTags)
 		{
 			Intent pIntent = new Intent(m_pContext, (new PageActivity()).Class);
-			pIntent.PutExtra("Type", "Edit");
+			pIntent.PutExtra("Type", "edit");
 			pIntent.PutExtra("SnippetName", sSnippetName);
 			pIntent.PutExtra("SourceName", sSnippetSourceName);
 			pIntent.PutExtra("SourceText", sSnippetSourceText);

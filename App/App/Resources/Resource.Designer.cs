@@ -2282,14 +2282,17 @@ namespace App
 			// aapt resource value: 0x7f07002a
 			public const int bottom = 2131165226;
 			
-			// aapt resource value: 0x7f0700a6
-			public const int btnSourceList = 2131165350;
+			// aapt resource value: 0x7f0700ab
+			public const int btnQuery = 2131165355;
 			
-			// aapt resource value: 0x7f0700a8
-			public const int btnSubmit = 2131165352;
+			// aapt resource value: 0x7f0700a7
+			public const int btnSourceList = 2131165351;
 			
-			// aapt resource value: 0x7f0700a4
-			public const int btnTagsList = 2131165348;
+			// aapt resource value: 0x7f0700a9
+			public const int btnSubmit = 2131165353;
+			
+			// aapt resource value: 0x7f0700a5
+			public const int btnTagsList = 2131165349;
 			
 			// aapt resource value: 0x7f070044
 			public const int buttonPanel = 2131165252;
@@ -2416,6 +2419,9 @@ namespace App
 			
 			// aapt resource value: 0x7f070072
 			public const int lblQueryText = 2131165298;
+			
+			// aapt resource value: 0x7f0700ad
+			public const int lblSimple = 2131165357;
 			
 			// aapt resource value: 0x7f07002f
 			public const int left = 2131165231;
@@ -2561,6 +2567,9 @@ namespace App
 			// aapt resource value: 0x7f070017
 			public const int screen = 2131165207;
 			
+			// aapt resource value: 0x7f0700a2
+			public const int scrlPage = 2131165346;
+			
 			// aapt resource value: 0x7f070026
 			public const int scroll = 2131165222;
 			
@@ -2690,17 +2699,23 @@ namespace App
 			// aapt resource value: 0x7f070073
 			public const int txtQuery = 2131165299;
 			
-			// aapt resource value: 0x7f0700a2
-			public const int txtSnippetContent = 2131165346;
-			
-			// aapt resource value: 0x7f0700a5
-			public const int txtSource = 2131165349;
-			
-			// aapt resource value: 0x7f0700a7
-			public const int txtSourceData = 2131165351;
+			// aapt resource value: 0x7f0700aa
+			public const int txtQueryField = 2131165354;
 			
 			// aapt resource value: 0x7f0700a3
-			public const int txtTags = 2131165347;
+			public const int txtSnippetContent = 2131165347;
+			
+			// aapt resource value: 0x7f0700a6
+			public const int txtSource = 2131165350;
+			
+			// aapt resource value: 0x7f0700a8
+			public const int txtSourceData = 2131165352;
+			
+			// aapt resource value: 0x7f0700ac
+			public const int txtStatus = 2131165356;
+			
+			// aapt resource value: 0x7f0700a4
+			public const int txtTags = 2131165348;
 			
 			// aapt resource value: 0x7f070009
 			public const int up = 2131165193;
@@ -2970,16 +2985,22 @@ namespace App
 			public const int Page = 2130903096;
 			
 			// aapt resource value: 0x7f030039
-			public const int select_dialog_item_material = 2130903097;
+			public const int QueryLayout = 2130903097;
 			
 			// aapt resource value: 0x7f03003a
-			public const int select_dialog_multichoice_material = 2130903098;
+			public const int select_dialog_item_material = 2130903098;
 			
 			// aapt resource value: 0x7f03003b
-			public const int select_dialog_singlechoice_material = 2130903099;
+			public const int select_dialog_multichoice_material = 2130903099;
 			
 			// aapt resource value: 0x7f03003c
-			public const int support_simple_spinner_dropdown_item = 2130903100;
+			public const int select_dialog_singlechoice_material = 2130903100;
+			
+			// aapt resource value: 0x7f03003d
+			public const int SimpleText = 2130903101;
+			
+			// aapt resource value: 0x7f03003e
+			public const int support_simple_spinner_dropdown_item = 2130903102;
 			
 			static Layout()
 			{

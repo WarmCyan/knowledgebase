@@ -14,13 +14,17 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.Webkit;
+using System.Text.RegularExpressions;
 using DWL.Utility;
 
 namespace App
 {
-	[Activity(Label = "Snippet")]
+	[Activity(Label = "Create Snippet")]
 	public class PageActivity : Activity
 	{
+		private static string s_sMetaPattern = @"<meta name='([a-zA-Z]*)' content='([^\']*)'>";
+		private static List<string> s_lGenericTags = new List<string>() { "Wisdom", "Theory", "Note", "Important", "Depth", "Definition", "Argument" };
+		
 		// member variables
 		private string m_sBaseDir;
 		private bool m_bEditing = false;
@@ -28,17 +32,12 @@ namespace App
 
 		private EditText m_pTags;
 		private EditText m_pSources;
-		
-		private static List<string> s_lGenericTags = new List<string>() { "Wisdom", "Theory", "Note", "Important", "Depth", "Definition", "Argument" };
+
 
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
 			SetContentView(Resource.Layout.Page);
-
-			string sType = this.Intent.GetStringExtra("Type");
-			if (sType == "new") { m_bEditing = false; }
-			else if (sType == "edit") { m_bEditing = true; }
 
 			//update local tag cache
 			m_sBaseDir = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
@@ -83,6 +82,35 @@ namespace App
 
 				this.Finish();
 			};
+
+			string sType = this.Intent.GetStringExtra("Type");
+			if (sType == "new") { m_bEditing = false; }
+			else if (sType == "edit") 
+			{
+				string sSnippetName = this.Intent.GetStringExtra("SnippetName");
+				string sSnippetSourceName = this.Intent.GetStringExtra("SourceName");
+				string sSnippetSourceText = this.Intent.GetStringExtra("SourceText");
+				string sSnippetTags = this.Intent.GetStringExtra("SnippetTags");
+
+				m_bEditing = true;
+				m_sEditingSnippet = sSnippetName;
+
+				// get the actual snippet content from the server
+				string sSnippetContent = WebCommunications.SendGetRequest("http://dwlapi.azurewebsites.net/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/GetSnippet?sfilename=" + sSnippetName, true);
+				sSnippetContent = Master.CleanResponse(sSnippetContent);
+
+				// remove the meta tags (since they are merely added back in on submit)
+				Regex pRegex = new Regex(s_sMetaPattern);
+				sSnippetContent = pRegex.Replace(sSnippetContent, "");
+
+				// fill fields
+				pSnippetContent.Text = sSnippetContent;
+				pSourceData.Text = sSnippetSourceText;
+				m_pTags.Text = sSnippetTags;
+				m_pSources.Text = sSnippetSourceName;
+
+				this.Title = "Edit Snippet";
+			}
 		}
 
 		private void UpdateTagCache()

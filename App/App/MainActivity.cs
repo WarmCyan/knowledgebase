@@ -20,12 +20,13 @@ namespace App
 	[Activity(Label = "App", MainLauncher = true, Icon = "@drawable/icon", Theme = "@android:style/Theme.NoTitleBar", ScreenOrientation = Android.Content.PM.ScreenOrientation.Portrait)]
 	public class MainActivity : Activity
 	{
-		private int count = 1;
+		private int m_iCount = 1;
 
 		private bool m_bBrowserInitialized;
 		private WebView m_pWebView;
 
 		private Dictionary<string, string> m_dLoadedPages;
+		private Dictionary<string, int> m_dPageScrollPoints;
 		private string m_sCurrentPage;
 
 		//private string[] m_aNavTitles;
@@ -44,6 +45,7 @@ namespace App
 
 			m_bBrowserInitialized = false;
 			m_dLoadedPages = new Dictionary<string, string>();
+			m_dPageScrollPoints = new Dictionary<string, int>();
 
 			// load important stuff
 			this.LoadCSS();
@@ -70,11 +72,23 @@ namespace App
 			{
 				int iChoice = e.Position;
 				string sChoice = m_lNavTitles[iChoice];
-				if (sChoice == "Query") { this.ShowInputDialog(); }
+				if (sChoice == "Query") 
+				{
+					//this.ShowInputDialog(); 
+					Intent pIntent = new Intent(this, (new QueryActivity()).Class);
+					pIntent.PutExtra("num", m_iCount);
+					StartActivityForResult(pIntent, 0);
+
+					/*if (Master.GetQueryNumber() == m_iCount)
+					{
+						m_iCount++;
+						this.Query(Master.GetQuery());
+					}*/
+				}
 				else if (sChoice == "New Snippet") 
 				{
 					Intent pIntent = new Intent(this, (new PageActivity()).Class);
-					pIntent.PutExtra("Type", "New");
+					pIntent.PutExtra("Type", "new");
 					StartActivity(pIntent);
 				}
 				else if (sChoice == "Close Current") { this.ClosePage(); }
@@ -121,6 +135,11 @@ namespace App
 		{
 			this.InitBrowser();
 
+			// save current point
+			if (m_sCurrentPage != "" && m_sCurrentPage != null) { m_dPageScrollPoints[m_sCurrentPage] = m_pWebView.ScrollY; }
+
+			int iScrollPoint = 0;
+
 			string sHTML = "";
 			if (!m_dLoadedPages.ContainsKey(sQuery))
 			{
@@ -131,17 +150,25 @@ namespace App
 				// fix response and add to it
 				sResponse = Master.CleanResponse(sResponse);
 
+				Console.WriteLine(m_sHead);
 				sHTML = "<html><head>" + m_sHead + "<style>" + m_sCSS + "</style></head>" + sResponse;
 
 				m_dLoadedPages.Add(sQuery, sHTML);
+				m_dPageScrollPoints.Add(sQuery, 0);
+				iScrollPoint = 0;
 				m_lNavTitles.Add(sQuery);
 				this.RefreshDrawer();
 			}
-			else { sHTML = m_dLoadedPages[sQuery]; }
+			else 
+			{ 
+				sHTML = m_dLoadedPages[sQuery];
+				iScrollPoint = m_dPageScrollPoints[sQuery];
+			}
 			m_sCurrentPage = sQuery;
 
 			m_pWebView.StopLoading();
 			m_pWebView.LoadData(sHTML, "text/html", "UTF-8");
+			m_pWebView.ScrollY = iScrollPoint;
 			m_pWebView.Reload();
 		}
 
@@ -152,6 +179,7 @@ namespace App
 			if (m_sCurrentPage == "" || m_sCurrentPage == null) return;
 			
 			m_dLoadedPages.Remove(m_sCurrentPage);
+			m_dPageScrollPoints.Remove(m_sCurrentPage);
 			m_lNavTitles.Remove(m_sCurrentPage);
 
 			m_pWebView.StopLoading();
@@ -202,6 +230,15 @@ namespace App
 			// create an alert dialog
 			AlertDialog alert = pAlertBuilder.Create();
 			alert.Show();
+		}
+
+		protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
+		{
+			base.OnActivityResult(requestCode, resultCode, data);
+			if (resultCode == Result.Ok)
+			{
+				this.Query(data.GetStringExtra("Query"));
+			}
 		}
 	}
 }
