@@ -2282,8 +2282,11 @@ namespace App
 			// aapt resource value: 0x7f07002a
 			public const int bottom = 2131165226;
 			
-			// aapt resource value: 0x7f0700ab
-			public const int btnQuery = 2131165355;
+			// aapt resource value: 0x7f0700aa
+			public const int btnDelete = 2131165354;
+			
+			// aapt resource value: 0x7f0700ac
+			public const int btnQuery = 2131165356;
 			
 			// aapt resource value: 0x7f0700a7
 			public const int btnSourceList = 2131165351;
@@ -2420,8 +2423,8 @@ namespace App
 			// aapt resource value: 0x7f070072
 			public const int lblQueryText = 2131165298;
 			
-			// aapt resource value: 0x7f0700ad
-			public const int lblSimple = 2131165357;
+			// aapt resource value: 0x7f0700ae
+			public const int lblSimple = 2131165358;
 			
 			// aapt resource value: 0x7f07002f
 			public const int left = 2131165231;
@@ -2699,8 +2702,8 @@ namespace App
 			// aapt resource value: 0x7f070073
 			public const int txtQuery = 2131165299;
 			
-			// aapt resource value: 0x7f0700aa
-			public const int txtQueryField = 2131165354;
+			// aapt resource value: 0x7f0700ab
+			public const int txtQueryField = 2131165355;
 			
 			// aapt resource value: 0x7f0700a3
 			public const int txtSnippetContent = 2131165347;
@@ -2711,8 +2714,8 @@ namespace App
 			// aapt resource value: 0x7f0700a8
 			public const int txtSourceData = 2131165352;
 			
-			// aapt resource value: 0x7f0700ac
-			public const int txtStatus = 2131165356;
+			// aapt resource value: 0x7f0700ad
+			public const int txtStatus = 2131165357;
 			
 			// aapt resource value: 0x7f0700a4
 			public const int txtTags = 2131165348;

@@ -83,6 +83,23 @@ namespace App
 				this.Finish();
 			};
 
+			Button pDeleteButton = FindViewById<Button>(Resource.Id.btnDelete);
+			pDeleteButton.Click += delegate
+			{
+				if (!m_bEditing) { return; }
+				
+				// thanks to https://forums.xamarin.com/discussion/6096/how-show-confirmation-message-box-in-vs-2012
+				var pBuilder = new AlertDialog.Builder(this);
+				pBuilder.SetMessage("Are you sure you want to delete this snippet?");
+				pBuilder.SetPositiveButton("Yes", (s, e) =>
+				{
+					WebCommunications.SendGetRequest("http://dwlapi.azurewebsites.net/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/DeleteSnippet?sfilename=" + m_sEditingSnippet, true);
+					this.Finish();
+				});
+				pBuilder.SetNegativeButton("No", (s, e) => { return; });
+				pBuilder.Create().Show();
+			};
+
 			string sType = this.Intent.GetStringExtra("Type");
 			if (sType == "new") { m_bEditing = false; }
 			else if (sType == "edit") 
