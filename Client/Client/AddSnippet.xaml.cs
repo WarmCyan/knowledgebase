@@ -99,21 +99,7 @@ namespace Client
 				if (lTags.Contains(sGeneric)) lTags.Remove(sGeneric);
 				lTags.Insert(0, sGeneric);
 			}
-			/*if (lTags.Contains("Definition")) lTags.Remove("Definition");
-			if (lTags.Contains("Theory")) lTags.Remove("Theory");
-			if (lTags.Contains("Argument")) lTags.Remove("Argument");
-			if (lTags.Contains("Wisdom")) lTags.Remove("Wisdom");
-			if (lTags.Contains("Note")) lTags.Remove("Note");
-			if (lTags.Contains("Depth")) lTags.Remove("Depth");
-			if (lTags.Contains("Important")) lTags.Remove("Important");
-			lTags.Insert(0, "Wisdom");
-			lTags.Insert(0, "Theory");
-			lTags.Insert(0, "Note");
-			lTags.Insert(0, "Important");
-			lTags.Insert(0, "Depth");
-			lTags.Insert(0, "Definition");
-			lTags.Insert(0, "Argument");*/
-
+			
 			// tags
 			foreach (string sTag in lTags)
 			{
@@ -172,15 +158,6 @@ namespace Client
 			}
 		}
 
-		/*private void btnSource_MouseLeave(object sender, MouseEventArgs e) { btnAddSource.Background = new SolidColorBrush(Color.FromRgb(21, 21, 21)); }
-
-		private void btnSource_MouseEnter(object sender, MouseEventArgs e) { btnAddSource.Background = new SolidColorBrush(Color.FromRgb(69, 186, 255)); }*/
-
-		private void btnSource_MouseUp(object sender, MouseButtonEventArgs e)
-		{
-			// open add source window here
-		}
-
 		private void btnSubmit_MouseLeave(object sender, MouseEventArgs e) { btnSubmit.Background = new SolidColorBrush(Color.FromRgb(21, 21, 21)); }
 
 		private void btnSubmit_MouseEnter(object sender, MouseEventArgs e) { btnSubmit.Background = new SolidColorBrush(Color.FromRgb(69, 186, 255)); }
@@ -222,6 +199,34 @@ namespace Client
 		private void txtSnippetContent_TextChanged(object sender, TextChangedEventArgs e)
 		{
 			lblStatus.Content = "";
+		}
+
+		private void btnDelete_MouseLeave(object sender, MouseEventArgs e)
+		{
+			btnDelete.Background = new SolidColorBrush(Color.FromRgb(170, 37, 37));
+		}
+
+		private void btnDelete_MouseEnter(object sender, MouseEventArgs e)
+		{
+			btnDelete.Background = new SolidColorBrush(Color.FromRgb(200, 80, 80));
+		}
+
+		private void btnDelete_MouseUp(object sender, MouseButtonEventArgs e)
+		{
+			if (!m_bEditing) { return; }
+
+			string sResponse = "";
+			
+			// msgbox verify
+			if (MessageBox.Show("Are you sure you want to delete this snippet?", "Question", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+			{
+				sResponse = WebCommunications.SendGetRequest("http://dwlapi.azurewebsites.net/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/DeleteSnippet?sfilename=" + m_sEditingSnippet, true);
+				if (sResponse != "") { lblStatus.Content = "Error!"; File.WriteAllText(m_sBaseDir + "errordump.txt", sResponse); return; }
+				
+				Master.GetMainWindow().ShowPage(Master.GetMainWindow().ActiveQuery, true);
+				this.Close(); 
+			}
+			else { return; }
 		}
 	}
 }

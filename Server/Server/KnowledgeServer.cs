@@ -57,6 +57,36 @@ namespace KnowledgeBaseServer
 			return pContents;
 		}
 
+		public void DeleteSnippet(string sFileName)
+		{
+			// get prexisting tag list for this snippet
+			TableOperation pRetrieveInitialOperation = TableOperation.Retrieve<SnippetTableEntity>("SNIPPET", sFileName);
+			TableResult pInitialSnippetResult = this.Table.Execute(pRetrieveInitialOperation);
+			SnippetTableEntity pInitialSnippet = (SnippetTableEntity)pInitialSnippetResult.Result;
+
+			string sPreviousTags = pInitialSnippet.TagList;
+			List<string> lPreviousTags = sPreviousTags.Split(',').ToList();
+			
+			// delete every combination of tag partition key and the filename (rowkey)
+			foreach (string sOldTag in lPreviousTags)
+			{
+				// referencing row entity with a dynamic table entity allows deletion by partition/row key without having to first manually retrieve the correct entity
+				DynamicTableEntity pDynamicEntity = new DynamicTableEntity(sOldTag, sFileName);
+				pDynamicEntity.ETag = "*";
+
+				TableOperation pDeletionOperation = TableOperation.Delete(pDynamicEntity);
+				this.Table.Execute(pDeletionOperation);
+			}
+			
+			// delete the snippet from the SNIPPET partition
+			TableOperation pInitialSnippetDeletion = TableOperation.Delete(pInitialSnippet);
+			this.Table.Execute(pInitialSnippetDeletion);
+			
+			// delete the snippet blob
+			CloudBlockBlob pBlob = this.Container.GetBlockBlobReference(sFileName);
+			pBlob.Delete();
+		}
+
 		public void EditSnippet(string sFileName, string sSnippet, string sTagList)
 		{
 			//List<string> lTags = sTagList.Split(',').ToList();

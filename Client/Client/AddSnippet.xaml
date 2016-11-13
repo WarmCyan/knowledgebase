@@ -43,8 +43,12 @@
 			<TextBox Name="txtSourceText" Padding="5" Margin="10,5" Foreground="White" Background="Transparent" BorderThickness="2" BorderBrush="#444444" TextWrapping="Wrap" CaretBrush="White" Height="75"></TextBox>
 		</DockPanel>
 		
-		<Border Grid.Row="4" Grid.Column="0" BorderBrush="#444444" BorderThickness="2" Margin="10,0,10,5">
+		<Border Grid.Row="4" Grid.Column="0" BorderBrush="#444444" BorderThickness="2" Margin="10,0,120,5">
 			<TextBlock TextAlignment="Center" Name="btnSubmit" Background="#151515" Padding="30,10" Foreground="White" MouseLeave="btnSubmit_MouseLeave" MouseEnter="btnSubmit_MouseEnter" MouseUp="btnSubmit_MouseUp">Submit</TextBlock>
+		</Border>
+		
+		<Border Grid.Row="4" Grid.Column="0" HorizontalAlignment="Right" BorderBrush="#444444" BorderThickness="2" Margin="10,0,10,5" Width="100">
+			<TextBlock TextAlignment="Center" Name="btnDelete" Background="#AA2525" Padding="30,10" Foreground="White" MouseLeave="btnDelete_MouseLeave" MouseEnter="btnDelete_MouseEnter" MouseUp="btnDelete_MouseUp">Delete</TextBlock>
 		</Border>
 
 		<!-- Sidebar -->

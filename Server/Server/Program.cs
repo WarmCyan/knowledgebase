@@ -37,7 +37,7 @@ namespace KnowledgeBaseServer
 
 			//AddTestingSnippets();
 
-			string sPage = Query("Genetic_Algorithm");
+			//string sPage = Query("Genetic_Algorithm");
 
 			//string sPage = GetTags();
 
@@ -45,11 +45,13 @@ namespace KnowledgeBaseServer
 
 			//string sPage = GetSnippet("s636125978981349050");
 
+			DeleteSnippet("s636146206727119253");
+
 
 			Console.WriteLine("Finished");
-			Console.WriteLine("\n" + sPage);
+			//Console.WriteLine("\n" + sPage);
 
-			File.WriteAllText("./output.html", sPage);
+			//File.WriteAllText("./output.html", sPage);
 			
 			Console.Read();
 		}
@@ -99,6 +101,12 @@ namespace KnowledgeBaseServer
 		{
 			KnowledgeServer ks = new KnowledgeServer();
 			ks.EditSnippet(sSnippetName, sSnippet, sTagList);
+		}
+
+		public static void DeleteSnippet(string sSnippetName)
+		{
+			KnowledgeServer ks = new KnowledgeServer();
+			ks.DeleteSnippet(sSnippetName);
 		}
 
 		public static string GetSnippet(string sSnippetName)
