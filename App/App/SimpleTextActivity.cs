@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Xamarin.Forms;
+
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -26,6 +28,16 @@ namespace App
 			this.Title = sTitle;
 			TextView pTextView = FindViewById<TextView>(Resource.Id.lblSimple);
 			pTextView.Text = sContent;
+
+			if (sContent.Contains("http"))
+			{
+				//pTextView.SetTextColor(Android.Graphics.Color.MediumBlue);
+				pTextView.Click += delegate
+				{
+					Device.OpenUri(new Uri(sContent));
+				};
+			}
 		}
+
 	}
 }

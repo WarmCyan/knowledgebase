@@ -107,6 +107,8 @@ namespace App
 			//Query("Genetic_Algorithm");
 			//Query("Test");
 			Console.WriteLine("Hello world!");
+
+			global::Xamarin.Forms.Forms.Init(this, bundle);
 		}
 
 		private void InitBrowser()
