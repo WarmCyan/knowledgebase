@@ -51,6 +51,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Mono.Android" />
+    <Reference Include="Mono.Android.Export" />
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -109,6 +110,7 @@
   <ItemGroup>
     <Compile Include="CustomWebViewClient.cs" />
     <Compile Include="DrawerItemCustomAdapter.cs" />
+    <Compile Include="JSInterface.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Master.cs" />
     <Compile Include="PageActivity.cs" />

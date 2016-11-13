@@ -74,6 +74,7 @@ namespace App
 				else if (sChoice == "New Snippet") 
 				{
 					Intent pIntent = new Intent(this, (new PageActivity()).Class);
+					pIntent.PutExtra("Type", "New");
 					StartActivity(pIntent);
 				}
 				else if (sChoice == "Close Current") { this.ClosePage(); }
@@ -100,12 +101,18 @@ namespace App
 			{
 				m_pWebView = FindViewById<WebView>(Resource.Id.webview);
 				m_pWebView.SetWebChromeClient(new WebChromeClient());
+				
+				// setting stuff
 				m_pWebView.Settings.JavaScriptEnabled = true;
 				m_pWebView.Settings.AllowFileAccessFromFileURLs = true;
 				m_pWebView.Settings.AllowUniversalAccessFromFileURLs = true;
 				m_pWebView.Settings.DomStorageEnabled = true;
 				m_pWebView.Settings.SetPluginState(WebSettings.PluginState.On);
 				m_pWebView.SetLayerType(LayerType.Hardware, null); // make it go faster?
+
+				// attach our javascript interface thing
+				m_pWebView.AddJavascriptInterface(new JSInterface(this), "CSharp");
+
 				m_bBrowserInitialized = true;
 			}
 		}

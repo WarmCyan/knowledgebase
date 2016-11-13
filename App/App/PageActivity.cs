@@ -23,6 +23,8 @@ namespace App
 	{
 		// member variables
 		private string m_sBaseDir;
+		private bool m_bEditing = false;
+		private string m_sEditingSnippet = "";
 
 		private EditText m_pTags;
 		private EditText m_pSources;
@@ -34,13 +36,19 @@ namespace App
 			base.OnCreate(savedInstanceState);
 			SetContentView(Resource.Layout.Page);
 
+			string sType = this.Intent.GetStringExtra("Type");
+			if (sType == "new") { m_bEditing = false; }
+			else if (sType == "edit") { m_bEditing = true; }
+
 			//update local tag cache
 			m_sBaseDir = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
 			this.UpdateTagCache();
-			
 
 			m_pTags = FindViewById<EditText>(Resource.Id.txtTags);
 			m_pSources = FindViewById<EditText>(Resource.Id.txtSource);
+
+			EditText pSnippetContent = FindViewById<EditText>(Resource.Id.txtSnippetContent);
+			EditText pSourceData = FindViewById<EditText>(Resource.Id.txtSourceData);
 
 			Button pTagsButton = FindViewById<Button>(Resource.Id.btnTagsList);
 			pTagsButton.Click += delegate
@@ -52,11 +60,29 @@ namespace App
 			{
 				this.DisplayList("sources");
 			};
-			
-			//AssetManager pManager = this.Assets;
-			//var pStream = pManager.Open("Style.css");
-			//StreamReader pStreamReader = new StreamReader(pStream);
-			//m_sCSS = pStreamReader.ReadToEnd();
+
+			Button pSubmitButton = FindViewById<Button>(Resource.Id.btnSubmit);
+			pSubmitButton.Click += delegate
+			{
+				string sContent = pSnippetContent.Text;
+				string sTags = m_pTags.Text + ",source:" + m_pSources.Text;
+
+				// add meta tags
+				//sContent = "<meta name='sourceTag' content='" + lblSourceName.Content + "'><meta name='source' content='" + txtSourceText.Text + "'>" + sContent;
+				sContent = "<meta name='sourceTag' content='" + m_pSources.Text + "'><meta name='source' content='" + pSourceData.Text + "'>" + sContent;
+
+				// make the xml request body
+				string sBody = "<params>";
+				sBody += "<param name='sTagList'>" + sTags + "</param><param name='sSnippet'>" + Master.EncodeXML(sContent) + "</param>";
+				if (m_bEditing) { sBody += "<param name='sFileName'>" + m_sEditingSnippet + "</param>"; }
+				sBody += "</params>";
+
+				string sResponse = "";
+				if (m_bEditing) { sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/EditSnippet", sBody, true); }
+				else { sResponse = WebCommunications.SendPostRequest("http://dwlapi.azurewebsites.net/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/AddSnippet", sBody, true); }
+
+				this.Finish();
+			};
 		}
 
 		private void UpdateTagCache()
