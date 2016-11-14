@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
         Title="KnowledgeBase" Height="650" Width="1000"
-		Background="#222222" SizeChanged="Window_SizeChanged" KeyUp="Window_KeyUp" TextOptions.TextFormattingMode="Display">
+		Background="#222222" SizeChanged="Window_SizeChanged" KeyUp="Window_KeyUp" TextOptions.TextFormattingMode="Display"
+		Icon="Logo.ico">
     <Grid Name="grdMain" KeyUp="Window_KeyUp">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="250"/>
