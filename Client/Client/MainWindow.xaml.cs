@@ -33,6 +33,9 @@ namespace Client
 		private Dictionary<string, Page> m_dPageStack;
 		private Dictionary<string, Border> m_dPageStackLabels;
 
+		private Image m_pStartupImage;
+		private bool m_bStartupDisplayed = true;
+
 		// construction
 		public MainWindow()
 		{
@@ -49,7 +52,19 @@ namespace Client
 			Master.AssignMainWindow(this);
 
 			//this.ShowPage("Genetic_Algorithm");
-			this.ShowPage("Test");
+			/*this.ShowPage("Test");
+			
+			BitmapImage pOrigImage = new BitmapImage(new Uri(@"pack://application:,,,/Logo_256.png"));
+			m_pStartupImage = new Image();
+			
+			m_pStartupImage.Source = pOrigImage;
+			m_pStartupImage.Width = 256;
+			m_pStartupImage.Height = 256;
+
+			
+			cnvsMain.Children.Add(m_pStartupImage);
+			Canvas.SetLeft(m_pStartupImage, (this.ActualWidth-250) / 2);
+			Canvas.SetTop(m_pStartupImage, cnvsMain.ActualHeight / 2);*/
 		}
 
 		// properties
@@ -61,6 +76,8 @@ namespace Client
 		{
 			string sFixedQuery = HttpUtility.UrlEncode(sQuery);
 			string sResponse = WebCommunications.SendGetRequest("http://dwlapi.azurewebsites.net/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/ConstructPage?squery=" + sFixedQuery, true);
+
+			if (m_bStartupDisplayed) { cnvsMain.Children.Remove(m_pStartupImage); m_bStartupDisplayed = false; }
 
 			// sanitize
 			//sResponse = sResponse.Trim('\"');
@@ -171,7 +188,8 @@ namespace Client
 
 		// update the size of the browser 
 		private void UpdatePageSize() 
-		{ 
+		{
+			if (m_pActivePage == null) { return; }
 			m_pActivePage.Height = cnvsMain.ActualHeight;
 			m_pActivePage.Width = cnvsMain.ActualWidth;
 		}

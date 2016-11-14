@@ -44,7 +44,6 @@ namespace Client
 		public bool Empty { get { return m_bIsEmpty; } set { m_bIsEmpty = value; } }
 
 		// functions
-
 		public void FillHtml(string sHtml)
 		{
 			if (sHtml == "") { m_bIsEmpty = true; }
