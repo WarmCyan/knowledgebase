@@ -93,7 +93,7 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DWL.Utility">
@@ -199,7 +199,6 @@
     <Content Include="HeadStuff.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Resource Include="Logo_256.png" />
     <Resource Include="Logo.ico" />
   </ItemGroup>
   <ItemGroup>

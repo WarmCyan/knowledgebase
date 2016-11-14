@@ -49,7 +49,7 @@ namespace Client
 
 			// get the actual snippet content from the server
 			string sSnippetContent = WebCommunications.SendGetRequest("http://dwlapi.azurewebsites.net/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/GetSnippet?sfilename=" + sSnippetName, true);
-			sSnippetContent = Master.CleanResponse(sSnippetContent);
+			sSnippetContent = Master.CleanResponseForEditor(sSnippetContent);
 
 			// remove the meta tags (since they are merely added back in on submit)
 			Regex pRegex = new Regex(s_sMetaPattern);
