@@ -1,4 +1,13 @@
-﻿using System;
+﻿//*************************************************************
+//  File: PageConstructor.cs
+//  Date created: 10/2/2016
+//  Date edited: 11/16/2016
+//  Author: Nathan Martindale
+//  Copyright © 2016 Digital Warrior Labs
+//  Description: Class that handles creating the overall page structure from the snippets 
+//*************************************************************
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,9 +23,6 @@ namespace KnowledgeBaseServer
 {
 	public class Page
 	{
-		// static variables
-		private static List<string> s_lGenericTags = new List<string>() { "Definition", "Theory", "Argument", "Wisdom", "Note", "Depth", "Important" };
-		
 		// member variables
 		private List<string> m_lQueryTags = new List<string>();
 		private string m_sInterestTag = "";
@@ -286,7 +292,8 @@ namespace KnowledgeBaseServer
 			for (int i = m_lQueryTags.Count - 1; i >= 0; i--)
 			{
 				string sTag = m_lQueryTags[i];
-				if (s_lGenericTags.Contains(sTag)) { continue; }
+				//if (s_lGenericTags.Contains(sTag)) { continue; }
+				if (Master.s_lGenericTags.Contains(sTag)) { continue; }
 				m_sInterestTag = sTag;
 				return;
 			}

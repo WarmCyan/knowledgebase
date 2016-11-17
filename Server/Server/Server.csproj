@@ -83,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="KnowledgeServer.cs" />
+    <Compile Include="Master.cs" />
     <Compile Include="PageConstructor.cs" />
     <Compile Include="PageSnippet.cs" />
     <Compile Include="Program.cs" />

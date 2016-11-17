@@ -1,4 +1,13 @@
-﻿using System;
+﻿//*************************************************************
+//  File: KnowledgeServer.cs
+//  Date created: 9/28/2016
+//  Date edited: 11/16/2016
+//  Author: Nathan Martindale
+//  Copyright © 2016 Digital Warrior Labs
+//  Description: The "main" class that has all public-facing REST API callable stuff (ALL storage queries are handled here)
+//*************************************************************
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -48,6 +57,16 @@ namespace KnowledgeBaseServer
 		}
 
 		// methods
+
+		public string RandomTag()
+		{
+			List<TagTableEntity> pTagList = this.QueryTagList();
+
+			Random pRandom = new Random();
+			int iRandom = pRandom.Next(0, pTagList.Count);
+			while (Master.s_lGenericTags.Contains(pTagList[iRandom].RowKey)) { iRandom = pRandom.Next(0, pTagList.Count); }
+			return pTagList[iRandom].RowKey;
+		}
 
 		// gets ONLY the snippet content
 		public string GetSnippet(string sFileName)

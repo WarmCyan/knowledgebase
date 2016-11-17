@@ -45,11 +45,12 @@ namespace KnowledgeBaseServer
 
 			//string sPage = GetSnippet("s636125978981349050");
 
-			DeleteSnippet("s636146206727119253");
+			//DeleteSnippet("s636146206727119253");
 
+			string sPage = GetRandom();
 
 			Console.WriteLine("Finished");
-			//Console.WriteLine("\n" + sPage);
+			Console.WriteLine("\n" + sPage);
 
 			//File.WriteAllText("./output.html", sPage);
 			
@@ -113,6 +114,12 @@ namespace KnowledgeBaseServer
 		{
 			KnowledgeServer ks = new KnowledgeServer();
 			return ks.GetSnippet(sSnippetName);
+		}
+
+		public static string GetRandom()
+		{
+			KnowledgeServer ks = new KnowledgeServer();
+			return ks.RandomTag();
 		}
 	}
 }

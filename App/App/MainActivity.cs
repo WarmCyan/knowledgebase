@@ -1,4 +1,13 @@
-﻿using System;
+﻿//*************************************************************
+//  File: MainActivity.cs
+//  Date created: 10/21/2016
+//  Date edited: 11/16/2016
+//  Author: Nathan Martindale
+//  Copyright © 2016 Digital Warrior Labs
+//  Description: The main page/area of the app
+//*************************************************************
+
+using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.IO;
@@ -58,7 +67,7 @@ namespace App
 
 			// Get our button from the layout resource,
 			// and attach an event to it
-			m_lNavTitles = new List<string>() { "Query", "New Snippet", "Close Current" };
+			m_lNavTitles = new List<string>() { "Query", "New Snippet", "Close Current", "Random Tag" };
 
 			m_pDrawerLayout = FindViewById<DrawerLayout>(Resource.Id.appDrawerLayout);
 			m_pDrawerList = FindViewById<ListView>(Resource.Id.appDrawerList);
@@ -69,37 +78,27 @@ namespace App
 			{
 				int iChoice = e.Position;
 				string sChoice = m_lNavTitles[iChoice];
-				if (sChoice == "Query") 
+				if (sChoice == "Query")
 				{
 					Intent pIntent = new Intent(this, (new QueryActivity()).Class);
 					pIntent.PutExtra("num", m_iCount);
 					StartActivityForResult(pIntent, 0);
 				}
-				else if (sChoice == "New Snippet") 
+				else if (sChoice == "New Snippet")
 				{
 					Intent pIntent = new Intent(this, (new PageActivity()).Class);
 					pIntent.PutExtra("Type", "new");
 					StartActivity(pIntent);
 				}
 				else if (sChoice == "Close Current") { this.ClosePage(); }
+				else if (sChoice == "Random Tag") { this.RandomTag(); }
 				else { this.Query(sChoice); }
 
 				m_pDrawerLayout.CloseDrawer(m_pDrawerList);
 			};
 
 			global::Xamarin.Forms.Forms.Init(this, bundle);
-
-			//this.InitBrowser();
-			//string sHomeHTML = "<html><head><style>" + m_sCSS + "</style></head>" + m_sHome + "</html>";
-			//m_pWebView.StopLoading();
-			//m_pWebView.LoadData(sHomeHTML, "text/html", "UTF-8");
-			//m_pWebView.Reload();
-			//m_pWebView.LoadUrl("about:blank");
-			//m_pWebView.LoadUrl("http://google.com");
-			//m_pWebView.ClearCache(true);
-
 			DisplayHome();
-			
 		}
 
 		private void DisplayHome()
@@ -190,6 +189,12 @@ namespace App
 			this.DisplayHome();
 			m_sCurrentPage = "";
 			this.RefreshDrawer();
+		}
+
+		private void RandomTag()
+		{
+			string sResponse = WebCommunications.SendGetRequest("http://dwlapi.azurewebsites.net/api/reflection/KnowledgeBaseServer/KnowledgeBaseServer/KnowledgeServer/RandomTag", true);
+			this.Query(Master.CleanResponse(sResponse));
 		}
 
 		private void LoadCSS()
